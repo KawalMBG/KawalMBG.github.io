@@ -1,9 +1,10 @@
 // Ganti ini dengan ID klien Anda yang sebenarnya dari Google Cloud Console
 const GOOGLE_CLIENT_ID = '731188070183-ghpts2ppss378mlspma2bh3edci6eo37.apps.googleusercontent.com';
+
 const MAX_FILE_SIZE_MB = 1;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
-// --- Data Dummy untuk Autocomplete dan Alamat ---
+// --- Data Dummy untuk Autocomplete dan Alamat Sekolah ---
 const schools = [
     { name: "SDN 1 Ngaliyan", address: "Jl. Beringin Raya No. 1, Ngaliyan, Kota Semarang" },
     { name: "SDN 2 Mijen", address: "Jl. Raya Mijen No. 2, Mijen, Kota Semarang" },
@@ -14,17 +15,22 @@ const schools = [
     { name: "SD Negeri Kalibanteng Kulon 01", address: "Jl. Siliwangi No. 100, Kalibanteng Kulon, Kota Semarang" }
 ];
 
+// --- Data Dummy untuk Kota (untuk fitur Autocomplete Lokasi) ---
+const indonesianCities = [
+    "Kota Semarang",
+    "Kabupaten Semarang",
+    "Salatiga"
+];
+
 // --- Bagian Login dan Inisialisasi ---
 function handleCredentialResponse(response) {
     const credential = response.credential;
     const payload = decodeJwtResponse(credential);
 
-    // Menyembunyikan halaman sambutan dan menampilkan formulir utama
     document.getElementById('welcome-section').style.display = 'none';
     document.getElementById('main-form-section').style.display = 'block';
     
-    // Mengisi nama pelapor secara otomatis dari akun Google
-    // document.getElementById('reporter-name').value = payload.name;
+    document.getElementById('reporter-name').value = payload.name;
     document.getElementById('user-info').textContent = `Selamat datang, ${payload.name}`;
     localStorage.setItem('userEmail', payload.email);
 }
@@ -38,7 +44,6 @@ function decodeJwtResponse(token) {
     return JSON.parse(jsonPayload);
 }
 
-// Menjalankan fungsi saat halaman dimuat
 window.onload = function() {
     google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
@@ -60,14 +65,40 @@ window.onload = function() {
             }
         }
     });
+
+    // Inisialisasi Autocomplete untuk Lokasi
+    $("#reporter-location").autocomplete({
+        source: indonesianCities
+    });
+
+    // Panggil fungsi validasi setiap kali input WhatsApp berubah
+    const whatsappInput = document.getElementById('reporter-whatsapp');
+    whatsappInput.addEventListener('input', validateWhatsapp);
 };
+
+// --- Fungsi Validasi Real-time ---
+function validateWhatsapp() {
+    const whatsappInput = document.getElementById('reporter-whatsapp');
+    const errorMessage = document.getElementById('whatsapp-error');
+    const pattern = new RegExp(whatsappInput.getAttribute('pattern'));
+
+    if (whatsappInput.value.trim() === '') {
+        errorMessage.textContent = '';
+        whatsappInput.setCustomValidity('');
+    } else if (!pattern.test(whatsappInput.value)) {
+        errorMessage.textContent = 'Nomor Whatsapp harus 10-15 digit angka.';
+        whatsappInput.setCustomValidity('Invalid');
+    } else {
+        errorMessage.textContent = '';
+        whatsappInput.setCustomValidity('');
+    }
+}
 
 // --- Logika Formulir Dinamis dan Pengiriman ---
 const formBefore = document.getElementById('form-before');
 const formAfter = document.getElementById('form-after');
 const reportTypeDropdown = document.getElementById('report-type');
 
-// Menangani pilihan dropdown untuk menampilkan formulir yang sesuai
 reportTypeDropdown.addEventListener('change', () => {
     if (reportTypeDropdown.value === 'before') {
         formBefore.style.display = 'block';
@@ -81,7 +112,6 @@ reportTypeDropdown.addEventListener('change', () => {
     }
 });
 
-// Fungsi validasi ukuran file
 function validateFiles(files) {
     for (const file of files) {
         if (file.size > MAX_FILE_SIZE_BYTES) {
@@ -92,7 +122,6 @@ function validateFiles(files) {
     return true;
 }
 
-// Menangani pengiriman Form A (Keluhan)
 formBefore.addEventListener('submit', function(event) {
     event.preventDefault();
 
@@ -114,10 +143,8 @@ formBefore.addEventListener('submit', function(event) {
 
     console.log("Data Form A (Keluhan) yang akan dikirim:", data);
     alert('Form A berhasil dikirim!');
-    // Lanjutkan dengan pengiriman data ke backend
 });
 
-// Menangani pengiriman Form B (Insiden)
 formAfter.addEventListener('submit', function(event) {
     event.preventDefault();
     
@@ -136,8 +163,9 @@ formAfter.addEventListener('submit', function(event) {
     data['reporter_location'] = document.getElementById('reporter-location').value;
     data['reporter_school_address'] = document.getElementById('reporter-school-address').value;
     data['report_type'] = 'Insiden';
+    // Menambahkan data tanggal dan waktu kejadian dari Form B
+    data['incident_datetime'] = document.getElementById('incident-datetime').value;
     
     console.log("Data Form B (Insiden) yang akan dikirim:", data);
     alert('Form B berhasil dikirim!');
-    // Lanjutkan dengan pengiriman data ke backend
 });

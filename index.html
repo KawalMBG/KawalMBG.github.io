@@ -27,7 +27,7 @@
         </div>
 
         <div id="main-form-section" class="section" style="display:none;">
-           
+
             <p id="user-info">Selamat datang, [Nama Pengguna]</p>
 
             <form id="reporter-info-form">
@@ -36,6 +36,7 @@
 
                 <label for="reporter-whatsapp">No Whatsapp:</label>
                 <input type="tel" id="reporter-whatsapp" name="reporter-whatsapp" pattern="[0-9]{10,15}" required>
+                <span id="whatsapp-error" class="error-message"></span>
 
                 <label for="reporter-school">Nama Sekolah:</label>
                 <input type="text" id="reporter-school" name="reporter-school" required>
@@ -44,12 +45,8 @@
                 <input type="text" id="reporter-school-address" name="reporter-school-address" readonly>
 
                 <label for="reporter-location">Lokasi:</label>
-                <select id="reporter-location" name="reporter-location" required>
-                    <option value="">-- Pilih Wilayah --</option>
-                    <option value="Semarang (Kabupaten)">Semarang (Kabupaten)</option>
-                    <option value="Semarang (Kota)">Semarang (Kota)</option>
-                    <option value="Salatiga (Kota)">Salatiga (Kota)</option>
-                </select>
+                <input type="text" id="reporter-location" name="reporter-location"
+                    placeholder="Cari kota atau wilayah..." required>
 
                 <hr>
 
@@ -69,49 +66,32 @@
                 <div class="form-group">
                     <p><b>Kelayakan Makanan:</b></p>
                     <p>Pilih keluhan yang sesuai:</p>
-                    <table>
-                        <tr>
-                            <td><input type="checkbox" name="keluhan_makanan[]" value="Makanan berbau tidak sedap"></td>
-                            <td><label>Makanan berbau tidak sedap</label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="keluhan_makanan[]" value="Makanan terasa asam / basi"></td>
-                            <td><label>Makanan terasa asam / basi</label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="keluhan_makanan[]"
-                                    value="Makanan terlihat berlendir / berubah tekstur"></td>
-                            <td><label>Makanan terlihat berlendir / berubah tekstur</label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="keluhan_makanan[]"
-                                    value="Makanan berubah warna (tidak normal)"></td>
-                            <td><label>Makanan berubah warna (tidak normal)</label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="keluhan_makanan[]" value="Makanan mengandung benda asing">
-                            </td>
-                            <td><label>Makanan mengandung benda asing (serangga, rambut, plastik, dll.)</label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="keluhan_makanan[]" value="Makanan kurang matang"></td>
-                            <td><label>Makanan kurang matang</label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="keluhan_makanan[]" value="Makanan terlalu lama disimpan">
-                            </td>
-                            <td><label>Makanan terlalu lama disimpan (sudah dingin / tidak segar)</label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="keluhan_makanan[]"
-                                    value="Makanan menyebabkan mual, muntah, atau diare"></td>
-                            <td><label>Makanan menyebabkan mual, muntah, atau diare setelah dikonsumsi</label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="keluhan_makanan[]" value="Lainnya"></td>
-                            <td><label>Lainnya (harap tulis keterangan)</label></td>
-                        </tr>
-                    </table>
+                    <div class="flex-container">
+                        <div class="flex-item"><input type="checkbox" name="keluhan_makanan[]"
+                                value="Makanan berbau tidak sedap"> <label>Makanan berbau tidak sedap</label></div>
+                        <div class="flex-item"><input type="checkbox" name="keluhan_makanan[]"
+                                value="Makanan terasa asam / basi"> <label>Makanan terasa asam / basi</label></div>
+                        <div class="flex-item"><input type="checkbox" name="keluhan_makanan[]"
+                                value="Makanan terlihat berlendir / berubah tekstur"> <label>Makanan terlihat berlendir
+                                / berubah tekstur</label></div>
+                        <div class="flex-item"><input type="checkbox" name="keluhan_makanan[]"
+                                value="Makanan berubah warna (tidak normal)"> <label>Makanan berubah warna (tidak
+                                normal)</label></div>
+                        <div class="flex-item"><input type="checkbox" name="keluhan_makanan[]"
+                                value="Makanan mengandung benda asing"> <label>Makanan mengandung benda asing (serangga,
+                                rambut, plastik, dll.)</label></div>
+                        <div class="flex-item"><input type="checkbox" name="keluhan_makanan[]"
+                                value="Makanan kurang matang"> <label>Makanan kurang matang</label></div>
+                        <div class="flex-item"><input type="checkbox" name="keluhan_makanan[]"
+                                value="Makanan terlalu lama disimpan"> <label>Makanan terlalu lama disimpan (sudah
+                                dingin / tidak segar)</label></div>
+                        <div class="flex-item"><input type="checkbox" name="keluhan_makanan[]"
+                                value="Makanan menyebabkan mual, muntah, atau diare"> <label>Makanan menyebabkan mual,
+                                muntah, atau diare setelah dikonsumsi</label></div>
+                        <div class="flex-item"><input type="checkbox" name="keluhan_makanan[]" value="Lainnya">
+                            <label>Lainnya (harap tulis keterangan)</label>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -129,16 +109,12 @@
 
                 <div class="form-group">
                     <p><b>Kebersihan Dapur/Pengolahan:</b></p>
-                    <table>
-                        <tr>
-                            <td><input type="radio" id="dapur-bersih" name="kebersihan" value="Bersih" required></td>
-                            <td><label for="dapur-bersih">Bersih</label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="radio" id="dapur-tidak-bersih" name="kebersihan" value="Tidak Bersih"></td>
-                            <td><label for="dapur-tidak-bersih">Tidak Bersih</label></td>
-                        </tr>
-                    </table>
+                    <div class="flex-container">
+                        <div class="flex-item"><input type="radio" id="dapur-bersih" name="kebersihan" value="Bersih"
+                                required> <label for="dapur-bersih">Bersih</label></div>
+                        <div class="flex-item"><input type="radio" id="dapur-tidak-bersih" name="kebersihan"
+                                value="Tidak Bersih"> <label for="dapur-tidak-bersih">Tidak Bersih</label></div>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -165,22 +141,21 @@
 
                 <div class="form-group">
                     <p><b>Jenis Insiden:</b></p>
-                    <table>
-                        <tr>
-                            <td><input type="radio" id="insiden-keracunan" name="jenis_insiden"
-                                    value="Keracunan/Jatuh Sakit" required></td>
-                            <td><label for="insiden-keracunan">Keracunan Ringan</label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="radio" id="insiden-rawat-inap" name="jenis_insiden" value="Rawat Inap">
-                            </td>
-                            <td><label for="insiden-rawat-inap">Keracunan Berat / Rawat Inap</label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="radio" id="insiden-kematian" name="jenis_insiden" value="Kematian"></td>
-                            <td><label for="insiden-kematian">Kematian</label></td>
-                        </tr>
-                    </table>
+                    <div class="flex-container">
+                        <div class="flex-item"><input type="radio" id="insiden-keracunan" name="jenis_insiden"
+                                value="Keracunan/Jatuh Sakit" required> <label for="insiden-keracunan">Keracunan
+                                Ringan</label></div>
+                        <div class="flex-item"><input type="radio" id="insiden-rawat-inap" name="jenis_insiden"
+                                value="Rawat Inap"> <label for="insiden-rawat-inap">Keracunan Berat / Rawat Inap</label>
+                        </div>
+                        <div class="flex-item"><input type="radio" id="insiden-kematian" name="jenis_insiden"
+                                value="Kematian"> <label for="insiden-kematian">Kematian</label></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="incident-datetime">Tanggal & Waktu Kejadian:</label>
+                    <input type="datetime-local" id="incident-datetime" name="incident_datetime" required>
                 </div>
 
                 <div class="form-group">

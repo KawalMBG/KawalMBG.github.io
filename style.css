@@ -5,13 +5,10 @@ body {
   margin: 0;
   padding: 0;
   height: 100vh;
-  /* Menggunakan seluruh tinggi viewport untuk pemusatan */
   display: flex;
-  /* Menggunakan Flexbox untuk memusatkan container */
   justify-content: center;
   align-items: center;
   overflow-y: auto;
-  /* Memungkinkan scrolling jika konten melebihi tinggi layar */
 }
 
 /* Wadah utama formulir */
@@ -22,7 +19,6 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 800px;
   width: 90%;
-  /* Mengatur Flexbox untuk pemusatan logo dan konten formulir */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -122,20 +118,26 @@ hr {
   margin-bottom: 2em;
 }
 
-/* Styling untuk tabel di dalam form */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1em;
+/* Styling Flexbox untuk menggantikan tabel */
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-th,
-td {
-  border: none;
-  /* Menghapus border karena tidak diperlukan */
-  padding: 5px 0;
-  text-align: left;
-  vertical-align: top;
+.flex-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.flex-item input {
+  width: auto;
+  margin-right: 10px;
+}
+
+.flex-item label {
+  margin-top: 0;
 }
 
 /* Styling untuk catatan/note */
@@ -143,7 +145,6 @@ small {
   display: block;
   margin-top: 5px;
   color: #d63384;
-  /* Warna pink untuk menarik perhatian */
   font-style: italic;
   font-size: 0.9em;
 }
@@ -159,3 +160,11 @@ small {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
+.error-message {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 5px;
+  display: block;
+}
+
