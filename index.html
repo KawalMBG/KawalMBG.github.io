@@ -11,11 +11,10 @@
 
 <body>
     <div class="container">
-
+        <center>
+            <img src="logo.png" alt="Logo Kawal MBG" style="width:200px; margin-bottom: 20px;">
+        </center>
         <div id="welcome-section" class="section">
-            <center>
-                <img src="logo.png" alt="Logo Kawal MBG" style="width:200px; margin-bottom: 20px;">
-            </center>
             <h3>Selamat Datang di Formulir Pelaporan Program Makan Bergizi Gratis (MBG) Kabupaten Semarang</h3>
             <p>Terima kasih telah meluangkan waktu untuk mengisi formulir ini.</p>
             <p>Partisipasi Anda sangat penting untuk menjaga kualitas, keamanan, dan keberlanjutan program MBG.</p>
@@ -28,6 +27,7 @@
         </div>
 
         <div id="main-form-section" class="section" style="display:none;">
+           
             <p id="user-info">Selamat datang, [Nama Pengguna]</p>
 
             <form id="reporter-info-form">
@@ -169,12 +169,12 @@
                         <tr>
                             <td><input type="radio" id="insiden-keracunan" name="jenis_insiden"
                                     value="Keracunan/Jatuh Sakit" required></td>
-                            <td><label for="insiden-keracunan">Keracunan/Jatuh Sakit</label></td>
+                            <td><label for="insiden-keracunan">Keracunan Ringan</label></td>
                         </tr>
                         <tr>
                             <td><input type="radio" id="insiden-rawat-inap" name="jenis_insiden" value="Rawat Inap">
                             </td>
-                            <td><label for="insiden-rawat-inap">Rawat Inap</label></td>
+                            <td><label for="insiden-rawat-inap">Keracunan Berat / Rawat Inap</label></td>
                         </tr>
                         <tr>
                             <td><input type="radio" id="insiden-kematian" name="jenis_insiden" value="Kematian"></td>

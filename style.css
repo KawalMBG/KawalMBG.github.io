@@ -1,26 +1,20 @@
-
+/* Aturan dasar untuk seluruh halaman dan body */
 body {
   font-family: sans-serif;
   background-color: #f0f2f5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* height: 100vh; */
   margin: 0;
-}
-
-/* Styling untuk halaman awal agar berada di tengah layar */
-#welcome-section {
+  padding: 0;
+  height: 100vh;
+  /* Menggunakan seluruh tinggi viewport untuk pemusatan */
   display: flex;
-  flex-direction: column;
+  /* Menggunakan Flexbox untuk memusatkan container */
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  /* Mengambil seluruh tinggi viewport */
-  text-align: center;
+  overflow-y: auto;
+  /* Memungkinkan scrolling jika konten melebihi tinggi layar */
 }
 
-/* Mengatur container agar tetap di tengah */
+/* Wadah utama formulir */
 .container {
   background-color: #fff;
   padding: 2em;
@@ -28,14 +22,37 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 800px;
   width: 90%;
+  /* Mengatur Flexbox untuk pemusatan logo dan konten formulir */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
+/* Bagian-bagian dalam formulir */
 .section {
   padding: 1em 0;
+  width: 100%;
 }
 
+/* Halaman Sambutan (Welcome Section) yang terpusat di tengah */
+#welcome-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Judul dan teks info pengguna */
 h2 {
   color: #333;
+}
+
+h3 {
+  margin-top: 10px;
 }
 
 p#user-info {
@@ -44,8 +61,10 @@ p#user-info {
   color: #007bff;
 }
 
+/* Styling dasar form */
 form {
   text-align: left;
+  width: 100%;
 }
 
 label {
@@ -79,6 +98,7 @@ button {
   margin-top: 2em;
   cursor: pointer;
   font-size: 1.1em;
+  font-weight: bold;
 }
 
 button:hover {
@@ -92,42 +112,50 @@ hr {
   margin: 2em 0;
 }
 
+/* Grup Form dan Opsi */
+.form-group {
+  margin-bottom: 1.5em;
+}
 
+.form-options {
+  text-align: left;
+  margin-bottom: 2em;
+}
 
-/* Tambahkan di file style.css Anda */
+/* Styling untuk tabel di dalam form */
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1em;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1em;
 }
 
 th,
 td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-    vertical-align: top;
+  border: none;
+  /* Menghapus border karena tidak diperlukan */
+  padding: 5px 0;
+  text-align: left;
+  vertical-align: top;
 }
 
-th {
-    background-color: #f2f2f2;
-    font-weight: bold;
+/* Styling untuk catatan/note */
+small {
+  display: block;
+  margin-top: 5px;
+  color: #d63384;
+  /* Warna pink untuk menarik perhatian */
+  font-style: italic;
+  font-size: 0.9em;
 }
 
-.form-options {
-    text-align: left;
-    margin-bottom: 2em;
-}
-
-/* Tambahkan di file style.css Anda */
-.form-group {
-    margin-bottom: 1.5em;
-}
-
-/* Style untuk autocomplete */
+/* Styling untuk autocomplete jQuery UI */
 .ui-autocomplete {
-    max-height: 200px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 1000;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
