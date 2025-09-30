@@ -1,6 +1,6 @@
 // Konfigurasi Google Client ID Anda
 // Ganti ini dengan ID klien Anda yang sebenarnya dari Google Cloud Console
-const GOOGLE_CLIENT_ID = '368211286575-49heor3jndm49qvkjv710btp422deia9.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = '731188070183-ghpts2ppss378mlspma2bh3edci6eo37.apps.googleusercontent.com';
 
 function handleCredentialResponse(response) {
     // Tangani token kredensial yang dikembalikan oleh Google
