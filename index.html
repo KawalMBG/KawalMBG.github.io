@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KAWAL MBG - Laporan Bencana</title>
+    <title>Formulir Komplain PMBG</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,45 +12,142 @@
 
     <div class="container">
         <div id="login-section" class="section">
-            <h2>Selamat Datang di KAWAL MBG</h2>
+            <h2>Formulir Komplain Program Makan Bergizi Gratis</h2>
             <p>Silakan login untuk mengisi laporan.</p>
-            <center>
-                <div id="google-login-button"></div>
-            </center>
+            <div id="google-login-button"></div>
         </div>
 
-        <div id="report-form-section" class="section" style="display:none;">
-            <h2>Formulir Laporan Kejadian</h2>
+        <div id="main-form-section" class="section" style="display:none;">
             <p id="user-info">Selamat datang, [Nama Pengguna]</p>
-            <form id="report-form">
-                <h3>Laporan Sebelum Kejadian</h3>
-                <label for="tanggal-sebelum">Tanggal Kejadian Rencana:</label>
-                <input type="date" id="tanggal-sebelum" name="tanggal-sebelum" required>
 
-                <label for="jenis-kejadian">Jenis Kejadian:</label>
-                <select id="jenis-kejadian" name="jenis-kejadian" required>
-                    <option value="">-- Pilih Jenis --</option>
-                    <option value="banjir">Banjir</option>
-                    <option value="longsor">Longsor</option>
-                    <option value="kerusakan-infrastruktur">Kerusakan Infrastruktur</option>
+            <form id="reporter-info-form">
+                <h3>Bagian A – Identitas Pelapor</h3>
+                <label for="reporter-name">Nama Pelapor:</label>
+                <input type="text" id="reporter-name" name="reporter-name" readonly required>
+
+                <label for="reporter-whatsapp">No Whatsapp:</label>
+                <input type="tel" id="reporter-whatsapp" name="reporter-whatsapp" required>
+
+                <label for="reporter-school">Nama Sekolah:</label>
+                <select id="reporter-school" name="reporter-school" required>
+                    <option value="">-- Pilih Sekolah --</option>
                 </select>
-
-                <label for="lokasi-sebelum">Lokasi (Alamat / Koordinat):</label>
-                <textarea id="lokasi-sebelum" name="lokasi-sebelum" rows="3" required></textarea>
-
-                <label for="deskripsi-sebelum">Deskripsi Kondisi Awal:</label>
-                <textarea id="deskripsi-sebelum" name="deskripsi-sebelum" rows="5" required></textarea>
 
                 <hr>
 
-                <h3>Laporan Setelah Kejadian</h3>
-                <label for="tanggal-setelah">Tanggal Kejadian Aktual:</label>
-                <input type="datetime-local" id="tanggal-setelah" name="tanggal-setelah">
+                <div class="form-options">
+                    <p>Pilih Tipe Laporan:</p>
+                    <input type="radio" id="report-type-before" name="report-type" value="before" required>
+                    <label for="report-type-before">Sebelum Terjadi Kejadian (Form A)</label><br>
+                    <input type="radio" id="report-type-after" name="report-type" value="after">
+                    <label for="report-type-after">Sesudah Terjadi Kejadian (Form B)</label>
+                </div>
 
-                <label for="deskripsi-setelah">Deskripsi Kerusakan:</label>
-                <textarea id="deskripsi-setelah" name="deskripsi-setelah" rows="5"></textarea>
+                <hr>
 
-                <button type="submit">Kirim Laporan</button>
+            </form>
+
+            <form id="form-before" class="complaint-form" style="display:none;">
+                <h3>Bagian B – Form A (Sebelum Terjadi Kejadian/Insiden)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Kategori Keluhan</th>
+                            <th>Deskripsi Keluhan</th>
+                            <th>Bukti Pendukung</th>
+                            <th>Permintaan Tindak Lanjut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>
+                                <input type="checkbox" id="keluhan-1" name="keluhan-sebelum" value="Kelayakan Makanan">
+                                <label for="keluhan-1">Kelayakan Makanan</label>
+                            </td>
+                            <td><textarea name="deskripsi-1" rows="3"></textarea></td>
+                            <td><textarea name="bukti-1" rows="3"></textarea></td>
+                            <td><textarea name="tindaklanjut-1" rows="3"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>
+                                <input type="checkbox" id="keluhan-2" name="keluhan-sebelum"
+                                    value="Kebersihan Dapur/Pengolahan">
+                                <label for="keluhan-2">Kebersihan Dapur/Pengolahan</label>
+                            </td>
+                            <td><textarea name="deskripsi-2" rows="3"></textarea></td>
+                            <td><textarea name="bukti-2" rows="3"></textarea></td>
+                            <td><textarea name="tindaklanjut-2" rows="3"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>
+                                <input type="checkbox" id="keluhan-3" name="keluhan-sebelum"
+                                    value="Pilihan Menu Tidak Sesuai">
+                                <label for="keluhan-3">Pilihan Menu Tidak Sesuai</label>
+                            </td>
+                            <td><textarea name="deskripsi-3" rows="3"></textarea></td>
+                            <td><textarea name="bukti-3" rows="3"></textarea></td>
+                            <td><textarea name="tindaklanjut-3" rows="3"></textarea></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="submit">Kirim Laporan Form A</button>
+            </form>
+
+            <form id="form-after" class="complaint-form" style="display:none;">
+                <h3>Bagian C – Form B (Sesudah Terjadi Kejadian/Insiden)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Jenis Insiden</th>
+                            <th>Kronologi Kejadian</th>
+                            <th>Dampak pada Korban</th>
+                            <th>Bukti Pendukung</th>
+                            <th>Permintaan Pertanggungjawaban</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>
+                                <input type="checkbox" id="insiden-1" name="insiden-setelah"
+                                    value="Keracunan/Jatuh Sakit">
+                                <label for="insiden-1">Keracunan/Jatuh Sakit</label>
+                            </td>
+                            <td><textarea name="kronologi-1" rows="3"></textarea></td>
+                            <td><textarea name="dampak-1" rows="3"></textarea></td>
+                            <td><textarea name="bukti-setelah-1" rows="3"></textarea></td>
+                            <td><textarea name="tanggungjawab-1" rows="3"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>
+                                <input type="checkbox" id="insiden-2" name="insiden-setelah" value="Rawat Inap">
+                                <label for="insiden-2">Rawat Inap</label>
+                            </td>
+                            <td><textarea name="kronologi-2" rows="3"></textarea></td>
+                            <td><textarea name="dampak-2" rows="3"></textarea></td>
+                            <td><textarea name="bukti-setelah-2" rows="3"></textarea></td>
+                            <td><textarea name="tanggungjawab-2" rows="3"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>
+                                <input type="checkbox" id="insiden-3" name="insiden-setelah" value="Kematian">
+                                <label for="insiden-3">Kematian</label>
+                            </td>
+                            <td><textarea name="kronologi-3" rows="3"></textarea></td>
+                            <td><textarea name="dampak-3" rows="3"></textarea></td>
+                            <td><textarea name="bukti-setelah-3" rows="3"></textarea></td>
+                            <td><textarea name="tanggungjawab-3" rows="3"></textarea></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="submit">Kirim Laporan Form B</button>
             </form>
         </div>
     </div>

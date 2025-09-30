@@ -1,28 +1,20 @@
 // Konfigurasi Google Client ID Anda
 // Ganti ini dengan ID klien Anda yang sebenarnya dari Google Cloud Console
 const GOOGLE_CLIENT_ID = '731188070183-ghpts2ppss378mlspma2bh3edci6eo37.apps.googleusercontent.com';
-
+// --- Bagian Login ---
 function handleCredentialResponse(response) {
-    // Tangani token kredensial yang dikembalikan oleh Google
     const credential = response.credential;
-    console.log("Token ID Google: " + credential);
-    
-    // Decode JWT token untuk mendapatkan data pengguna
     const payload = decodeJwtResponse(credential);
-    console.log("Data Pengguna:", payload);
 
-    // Tampilkan formulir dan sembunyikan tombol login
     document.getElementById('login-section').style.display = 'none';
-    document.getElementById('report-form-section').style.display = 'block';
-
-    // Tampilkan nama pengguna di formulir
+    document.getElementById('main-form-section').style.display = 'block';
+    
+    // Mengisi nama pelapor secara otomatis dari Google
+    document.getElementById('reporter-name').value = payload.name;
     document.getElementById('user-info').textContent = `Selamat datang, ${payload.name}`;
-
-    // Anda bisa menyimpan email atau data lain jika perlu
-    // localStorage.setItem('userEmail', payload.email);
+    localStorage.setItem('userEmail', payload.email);
 }
 
-// Fungsi helper untuk decode JWT
 function decodeJwtResponse(token) {
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -39,47 +31,80 @@ window.onload = function() {
         callback: handleCredentialResponse
     });
     
-    // Render tombol login
     google.accounts.id.renderButton(
         document.getElementById('google-login-button'),
         { theme: "outline", size: "large", type: "standard" }
     );
+    
+    // Fungsi untuk mengisi dropdown sekolah
+    fetchSchools();
 };
 
-// Logika untuk menangani pengiriman formulir
-document.getElementById('report-form').addEventListener('submit', function(event) {
-    event.preventDefault(); // Mencegah form untuk refresh halaman
+// --- Logika Formulir Dinamis dan Pengiriman ---
+const formBefore = document.getElementById('form-before');
+const formAfter = document.getElementById('form-after');
+const radioBefore = document.getElementById('report-type-before');
+const radioAfter = document.getElementById('report-type-after');
 
+// Menangani pilihan radio button
+radioBefore.addEventListener('change', () => {
+    formBefore.style.display = 'block';
+    formAfter.style.display = 'none';
+});
+
+radioAfter.addEventListener('change', () => {
+    formAfter.style.display = 'block';
+    formBefore.style.display = 'none';
+});
+
+// Menangani pengiriman Form A (Sebelum)
+formBefore.addEventListener('submit', function(event) {
+    event.preventDefault();
     const formData = new FormData(this);
     const data = {};
-    formData.forEach((value, key) => {
-        data[key] = value;
-    });
+    formData.forEach((value, key) => data[key] = value);
 
-    // Tambahkan data pengguna dari payload JWT
-    // Anda bisa menyimpannya di localStorage setelah login untuk digunakan di sini
-    // data['reporter_email'] = localStorage.getItem('userEmail');
+    data['reporter_name'] = document.getElementById('reporter-name').value;
+    data['reporter_whatsapp'] = document.getElementById('reporter-whatsapp').value;
+    data['reporter_school'] = document.getElementById('reporter-school').value;
+    data['report_type'] = 'Sebelum';
 
-    // Di sini adalah bagian di mana Anda akan mengirim data 'data' ke backend API
-    console.log("Data yang akan dikirim:", data);
-    alert('Formulir berhasil dikirim! Data akan diproses.');
-
-    // Contoh: Kirim data ke Google Apps Script atau serverless function
-    // fetch('URL_API_BACKEND_ANDA', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(data),
-    // })
-    // .then(response => response.json())
-    // .then(result => {
-    //     console.log('Sukses:', result);
-    //     alert('Laporan Anda berhasil dikirim!');
-    //     this.reset();
-    // })
-    // .catch(error => {
-    //     console.error('Error:', error);
-    //     alert('Terjadi kesalahan saat mengirim laporan.');
-    // });
+    console.log("Data Form A (Sebelum) yang akan dikirim:", data);
+    alert('Form A berhasil dikirim!');
+    // Lanjutkan dengan pengiriman data ke backend
 });
+
+// Menangani pengiriman Form B (Sesudah)
+formAfter.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const formData = new FormData(this);
+    const data = {};
+    formData.forEach((value, key) => data[key] = value);
+    
+    data['reporter_name'] = document.getElementById('reporter-name').value;
+    data['reporter_whatsapp'] = document.getElementById('reporter-whatsapp').value;
+    data['reporter_school'] = document.getElementById('reporter-school').value;
+    data['report_type'] = 'Sesudah';
+
+    console.log("Data Form B (Sesudah) yang akan dikirim:", data);
+    alert('Form B berhasil dikirim!');
+    // Lanjutkan dengan pengiriman data ke backend
+});
+
+// Contoh fungsi untuk mengisi dropdown sekolah (membutuhkan data dari backend)
+async function fetchSchools() {
+    // Contoh data dari JSON/API
+    const schools = [
+        { id: 1, name: "SDN 1 Semarang" },
+        { id: 2, name: "SDN 2 Semarang" },
+        { id: 3, name: "SDN 3 Semarang" }
+    ];
+
+    const selectElement = document.getElementById('reporter-school');
+    schools.forEach(school => {
+        const option = document.createElement('option');
+        option.value = school.id;
+        option.textContent = school.name;
+        selectElement.appendChild(option);
+    });
+}

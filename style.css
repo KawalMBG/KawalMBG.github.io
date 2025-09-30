@@ -79,3 +79,30 @@ hr {
   background-color: #ddd;
   margin: 2em 0;
 }
+
+
+
+/* Tambahkan di file style.css Anda */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1em;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.form-options {
+    text-align: left;
+    margin-bottom: 2em;
+}
