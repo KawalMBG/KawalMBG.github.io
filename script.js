@@ -1,18 +1,17 @@
 // Ganti ini dengan ID klien Anda yang sebenarnya dari Google Cloud Console
 const GOOGLE_CLIENT_ID = '731188070183-ghpts2ppss378mlspma2bh3edci6eo37.apps.googleusercontent.com';
-// Konfigurasi Google Client ID Anda
 const MAX_FILE_SIZE_MB = 1;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
-// --- Data Dummy untuk Autocomplete ---
+// --- Data Dummy untuk Autocomplete dan Alamat ---
 const schools = [
-    "SDN 1 Ngaliyan",
-    "SDN 2 Mijen",
-    "SDN 3 Gunungpati",
-    "MIN 1 Semarang",
-    "SD Islam Al Azhar 25 Semarang",
-    "SD Kristen Lentera Kasih",
-    "SD Negeri Kalibanteng Kulon 01"
+    { name: "SDN 1 Ngaliyan", address: "Jl. Beringin Raya No. 1, Ngaliyan, Kota Semarang" },
+    { name: "SDN 2 Mijen", address: "Jl. Raya Mijen No. 2, Mijen, Kota Semarang" },
+    { name: "SDN 3 Gunungpati", address: "Jl. Patemon No. 3, Gunungpati, Kota Semarang" },
+    { name: "MIN 1 Semarang", address: "Jl. Wonodri Baru, Semarang Selatan, Kota Semarang" },
+    { name: "SD Islam Al Azhar 25 Semarang", address: "Jl. Sultan Agung No. 13, Candi, Kota Semarang" },
+    { name: "SD Kristen Lentera Kasih", address: "Jl. Gajahmada No. 5, Kota Semarang" },
+    { name: "SD Negeri Kalibanteng Kulon 01", address: "Jl. Siliwangi No. 100, Kalibanteng Kulon, Kota Semarang" }
 ];
 
 // --- Bagian Login dan Init ---
@@ -51,7 +50,18 @@ window.onload = function() {
     
     // Inisialisasi Autocomplete dengan data dummy
     $("#reporter-school").autocomplete({
-        source: schools
+        source: schools.map(school => school.name),
+        select: function(event, ui) {
+            // Saat sekolah dipilih, cari alamatnya dan isi field terkait
+            const selectedSchool = schools.find(school => school.name === ui.item.value);
+            if (selectedSchool) {
+                document.getElementById('reporter-school-address').value = selectedSchool.address;
+                // Di sini Anda perlu menambahkan field alamat di HTML
+                // Misalnya: document.getElementById('reporter-school-address').value = selectedSchool.address;
+                // Karena HTML Anda belum memiliki field alamat, kita akan log saja ke konsol.
+                console.log("Alamat Sekolah:", selectedSchool.address);
+            }
+        }
     });
 };
 
@@ -102,7 +112,8 @@ formBefore.addEventListener('submit', function(event) {
     data['reporter_whatsapp'] = document.getElementById('reporter-whatsapp').value;
     data['reporter_school'] = document.getElementById('reporter-school').value;
     data['report_type'] = 'Sebelum';
-
+    data['school_address'] = schools.find(school => school.name === data['reporter_school'])?.address; // Tambahkan alamat ke data
+    
     console.log("Data Form A (Sebelum) yang akan dikirim:", data);
     alert('Form A berhasil dikirim!');
     // Kirim data ke backend
@@ -125,7 +136,8 @@ formAfter.addEventListener('submit', function(event) {
     data['reporter_whatsapp'] = document.getElementById('reporter-whatsapp').value;
     data['reporter_school'] = document.getElementById('reporter-school').value;
     data['report_type'] = 'Sesudah';
-
+    data['school_address'] = schools.find(school => school.name === data['reporter_school'])?.address; // Tambahkan alamat ke data
+    
     console.log("Data Form B (Sesudah) yang akan dikirim:", data);
     alert('Form B berhasil dikirim!');
     // Kirim data ke backend

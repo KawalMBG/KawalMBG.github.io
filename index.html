@@ -22,7 +22,6 @@
             <p id="user-info">Selamat datang, [Nama Pengguna]</p>
 
             <form id="reporter-info-form">
-                <h3>Bagian A – Identitas Pelapor</h3>
                 <label for="reporter-name">Nama Pelapor:</label>
                 <input type="text" id="reporter-name" name="reporter-name" readonly required>
 
@@ -31,6 +30,9 @@
 
                 <label for="reporter-school">Nama Sekolah:</label>
                 <input type="text" id="reporter-school" name="reporter-school" required>
+
+                <label for="reporter-school-address">Alamat Sekolah:</label>
+                <input type="text" id="reporter-school-address" name="reporter-school-address" readonly>
 
                 <hr>
 
@@ -46,14 +48,25 @@
             </form>
 
             <form id="form-before" class="complaint-form" style="display:none;">
-                <h3>Bagian B – Form A (Sebelum Terjadi Kejadian/Insiden)</h3>
+                <h3>Form A (Sebelum Terjadi Kejadian/Insiden)</h3>
 
                 <div class="form-group">
                     <p><b>Kelayakan Makanan:</b></p>
-                    <input type="radio" id="layak" name="kelayakan_makanan" value="Layak" required>
-                    <label for="layak">Layak</label>
-                    <input type="radio" id="tidak-layak" name="kelayakan_makanan" value="Tidak Layak">
-                    <label for="tidak-layak">Tidak Layak</label>
+                    <table>
+                        <tr>
+                            <td>
+                                <input type="radio" id="makanan-layak" name="kelayakan_makanan" value="Layak" required>
+                            </td>
+                            <td><label for="makanan-layak">Layak</label></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="radio" id="makanan-tidak-layak" name="kelayakan_makanan"
+                                    value="Tidak Layak">
+                            </td>
+                            <td><label for="makanan-tidak-layak">Tidak Layak</label></td>
+                        </tr>
+                    </table>
                 </div>
 
                 <div class="form-group">
@@ -75,10 +88,20 @@
 
                 <div class="form-group">
                     <p><b>Kebersihan Dapur/Pengolahan:</b></p>
-                    <input type="radio" id="bersih" name="kebersihan" value="Bersih" required>
-                    <label for="bersih">Bersih</label>
-                    <input type="radio" id="tidak-bersih" name="kebersihan" value="Tidak Bersih">
-                    <label for="tidak-bersih">Tidak Bersih</label>
+                    <table>
+                        <tr>
+                            <td>
+                                <input type="radio" id="dapur-bersih" name="kebersihan" value="Bersih" required>
+                            </td>
+                            <td><label for="dapur-bersih">Bersih</label></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="radio" id="dapur-tidak-bersih" name="kebersihan" value="Tidak Bersih">
+                            </td>
+                            <td><label for="dapur-tidak-bersih">Tidak Bersih</label></td>
+                        </tr>
+                    </table>
                 </div>
 
                 <div class="form-group">
@@ -100,16 +123,31 @@
             </form>
 
             <form id="form-after" class="complaint-form" style="display:none;">
-                <h3>Bagian C – Form B (Sesudah Terjadi Kejadian/Insiden)</h3>
+                <h3>Form B (Sesudah Terjadi Kejadian/Insiden)</h3>
 
                 <div class="form-group">
                     <p><b>Jenis Insiden:</b></p>
-                    <input type="radio" id="keracunan" name="jenis_insiden" value="Keracunan/Jatuh Sakit" required>
-                    <label for="keracunan">Keracunan/Jatuh Sakit</label>
-                    <input type="radio" id="rawat-inap" name="jenis_insiden" value="Rawat Inap">
-                    <label for="rawat-inap">Rawat Inap</label>
-                    <input type="radio" id="kematian" name="jenis_insiden" value="Kematian">
-                    <label for="kematian">Kematian</label>
+                    <table>
+                        <tr>
+                            <td>
+                                <input type="radio" id="insiden-keracunan" name="jenis_insiden"
+                                    value="Keracunan/Jatuh Sakit" required>
+                            </td>
+                            <td><label for="insiden-keracunan">Keracunan/Jatuh Sakit</label></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="radio" id="insiden-rawat-inap" name="jenis_insiden" value="Rawat Inap">
+                            </td>
+                            <td><label for="insiden-rawat-inap">Rawat Inap</label></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="radio" id="insiden-kematian" name="jenis_insiden" value="Kematian">
+                            </td>
+                            <td><label for="insiden-kematian">Kematian</label></td>
+                        </tr>
+                    </table>
                 </div>
 
                 <div class="form-group">
