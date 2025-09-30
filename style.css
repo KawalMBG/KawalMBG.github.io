@@ -9,14 +9,25 @@ body {
   margin: 0;
 }
 
+/* Styling untuk halaman awal agar berada di tengah layar */
+#welcome-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  /* Mengambil seluruh tinggi viewport */
+  text-align: center;
+}
+
+/* Mengatur container agar tetap di tengah */
 .container {
   background-color: #fff;
   padding: 2em;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 800px;
-  width: 100%;
-  text-align: center;
+  width: 90%;
 }
 
 .section {
