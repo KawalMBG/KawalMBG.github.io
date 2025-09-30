@@ -14,14 +14,16 @@ const schools = [
     { name: "SD Negeri Kalibanteng Kulon 01", address: "Jl. Siliwangi No. 100, Kalibanteng Kulon, Kota Semarang" }
 ];
 
-// --- Bagian Login dan Init ---
+// --- Bagian Login dan Inisialisasi ---
 function handleCredentialResponse(response) {
     const credential = response.credential;
     const payload = decodeJwtResponse(credential);
 
-    document.getElementById('login-section').style.display = 'none';
+    // Menyembunyikan halaman sambutan dan menampilkan formulir utama
+    document.getElementById('welcome-section').style.display = 'none';
     document.getElementById('main-form-section').style.display = 'block';
     
+    // Mengisi nama pelapor secara otomatis dari akun Google
     // document.getElementById('reporter-name').value = payload.name;
     document.getElementById('user-info').textContent = `Selamat datang, ${payload.name}`;
     localStorage.setItem('userEmail', payload.email);
@@ -36,7 +38,7 @@ function decodeJwtResponse(token) {
     return JSON.parse(jsonPayload);
 }
 
-// Inisialisasi Google Sign-In dan Autocomplete
+// Menjalankan fungsi saat halaman dimuat
 window.onload = function() {
     google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
@@ -48,18 +50,13 @@ window.onload = function() {
         { theme: "outline", size: "large", type: "standard" }
     );
     
-    // Inisialisasi Autocomplete dengan data dummy
+    // Inisialisasi Autocomplete untuk Nama Sekolah
     $("#reporter-school").autocomplete({
         source: schools.map(school => school.name),
         select: function(event, ui) {
-            // Saat sekolah dipilih, cari alamatnya dan isi field terkait
             const selectedSchool = schools.find(school => school.name === ui.item.value);
             if (selectedSchool) {
                 document.getElementById('reporter-school-address').value = selectedSchool.address;
-                // Di sini Anda perlu menambahkan field alamat di HTML
-                // Misalnya: document.getElementById('reporter-school-address').value = selectedSchool.address;
-                // Karena HTML Anda belum memiliki field alamat, kita akan log saja ke konsol.
-                console.log("Alamat Sekolah:", selectedSchool.address);
             }
         }
     });
@@ -70,7 +67,7 @@ const formBefore = document.getElementById('form-before');
 const formAfter = document.getElementById('form-after');
 const reportTypeDropdown = document.getElementById('report-type');
 
-// Menangani pilihan dropdown
+// Menangani pilihan dropdown untuk menampilkan formulir yang sesuai
 reportTypeDropdown.addEventListener('change', () => {
     if (reportTypeDropdown.value === 'before') {
         formBefore.style.display = 'block';
@@ -95,7 +92,7 @@ function validateFiles(files) {
     return true;
 }
 
-// Menangani pengiriman Form A (Sebelum)
+// Menangani pengiriman Form A (Keluhan)
 formBefore.addEventListener('submit', function(event) {
     event.preventDefault();
 
@@ -111,15 +108,16 @@ formBefore.addEventListener('submit', function(event) {
     data['reporter_name'] = document.getElementById('reporter-name').value;
     data['reporter_whatsapp'] = document.getElementById('reporter-whatsapp').value;
     data['reporter_school'] = document.getElementById('reporter-school').value;
-    data['report_type'] = 'Sebelum';
-    data['school_address'] = schools.find(school => school.name === data['reporter_school'])?.address; // Tambahkan alamat ke data
-    
-    console.log("Data Form A (Sebelum) yang akan dikirim:", data);
+    data['reporter_location'] = document.getElementById('reporter-location').value;
+    data['reporter_school_address'] = document.getElementById('reporter-school-address').value;
+    data['report_type'] = 'Keluhan';
+
+    console.log("Data Form A (Keluhan) yang akan dikirim:", data);
     alert('Form A berhasil dikirim!');
-    // Kirim data ke backend
+    // Lanjutkan dengan pengiriman data ke backend
 });
 
-// Menangani pengiriman Form B (Sesudah)
+// Menangani pengiriman Form B (Insiden)
 formAfter.addEventListener('submit', function(event) {
     event.preventDefault();
     
@@ -135,10 +133,11 @@ formAfter.addEventListener('submit', function(event) {
     data['reporter_name'] = document.getElementById('reporter-name').value;
     data['reporter_whatsapp'] = document.getElementById('reporter-whatsapp').value;
     data['reporter_school'] = document.getElementById('reporter-school').value;
-    data['report_type'] = 'Sesudah';
-    data['school_address'] = schools.find(school => school.name === data['reporter_school'])?.address; // Tambahkan alamat ke data
+    data['reporter_location'] = document.getElementById('reporter-location').value;
+    data['reporter_school_address'] = document.getElementById('reporter-school-address').value;
+    data['report_type'] = 'Insiden';
     
-    console.log("Data Form B (Sesudah) yang akan dikirim:", data);
+    console.log("Data Form B (Insiden) yang akan dikirim:", data);
     alert('Form B berhasil dikirim!');
-    // Kirim data ke backend
+    // Lanjutkan dengan pengiriman data ke backend
 });
