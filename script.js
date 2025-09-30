@@ -27,10 +27,15 @@ function handleCredentialResponse(response) {
     const credential = response.credential;
     const payload = decodeJwtResponse(credential);
 
+    // Menyembunyikan halaman sambutan dan menampilkan formulir utama
     document.getElementById('welcome-section').style.display = 'none';
     document.getElementById('main-form-section').style.display = 'block';
-    
-    document.getElementById('reporter-name').value = payload.name;
+
+    // Mengubah tata letak body agar form dapat di-scroll
+    document.body.style.alignItems = 'flex-start';
+
+    // Mengisi nama pelapor secara otomatis dari akun Google
+    // document.getElementById('reporter-name').value = payload.name;
     document.getElementById('user-info').textContent = `Selamat datang, ${payload.name}`;
     localStorage.setItem('userEmail', payload.email);
 }
