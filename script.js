@@ -22,7 +22,7 @@ function handleCredentialResponse(response) {
     document.getElementById('login-section').style.display = 'none';
     document.getElementById('main-form-section').style.display = 'block';
     
-    document.getElementById('reporter-name').value = payload.name;
+    // document.getElementById('reporter-name').value = payload.name;
     document.getElementById('user-info').textContent = `Selamat datang, ${payload.name}`;
     localStorage.setItem('userEmail', payload.email);
 }
@@ -108,6 +108,7 @@ formBefore.addEventListener('submit', function(event) {
     const data = {};
     formData.forEach((value, key) => data[key] = value);
     
+    data['reporter_name'] = document.getElementById('reporter-name').value;
     data['reporter_whatsapp'] = document.getElementById('reporter-whatsapp').value;
     data['reporter_school'] = document.getElementById('reporter-school').value;
     data['report_type'] = 'Sebelum';
