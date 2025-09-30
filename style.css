@@ -106,3 +106,16 @@ th {
     text-align: left;
     margin-bottom: 2em;
 }
+
+/* Tambahkan di file style.css Anda */
+.form-group {
+    margin-bottom: 1.5em;
+}
+
+/* Style untuk autocomplete */
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1000;
+}

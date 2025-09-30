@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulir Komplain PMBG</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 </head>
 
 <body>
@@ -26,132 +27,119 @@
                 <input type="text" id="reporter-name" name="reporter-name" readonly required>
 
                 <label for="reporter-whatsapp">No Whatsapp:</label>
-                <input type="tel" id="reporter-whatsapp" name="reporter-whatsapp" required>
+                <input type="tel" id="reporter-whatsapp" name="reporter-whatsapp" pattern="[0-9]{10,15}" required>
 
                 <label for="reporter-school">Nama Sekolah:</label>
-                <select id="reporter-school" name="reporter-school" required>
-                    <option value="">-- Pilih Sekolah --</option>
-                </select>
+                <input type="text" id="reporter-school" name="reporter-school" required>
 
                 <hr>
 
                 <div class="form-options">
-                    <p>Pilih Tipe Laporan:</p>
-                    <input type="radio" id="report-type-before" name="report-type" value="before" required>
-                    <label for="report-type-before">Sebelum Terjadi Kejadian (Form A)</label><br>
-                    <input type="radio" id="report-type-after" name="report-type" value="after">
-                    <label for="report-type-after">Sesudah Terjadi Kejadian (Form B)</label>
+                    <label for="report-type">Pilih Tipe Laporan:</label>
+                    <select id="report-type" name="report-type" required>
+                        <option value="">-- Pilih Tipe --</option>
+                        <option value="before">Form A (Sebelum Kejadian)</option>
+                        <option value="after">Form B (Sesudah Kejadian)</option>
+                    </select>
                 </div>
-
-                <hr>
 
             </form>
 
             <form id="form-before" class="complaint-form" style="display:none;">
                 <h3>Bagian B – Form A (Sebelum Terjadi Kejadian/Insiden)</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Kategori Keluhan</th>
-                            <th>Deskripsi Keluhan</th>
-                            <th>Bukti Pendukung</th>
-                            <th>Permintaan Tindak Lanjut</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                <input type="checkbox" id="keluhan-1" name="keluhan-sebelum" value="Kelayakan Makanan">
-                                <label for="keluhan-1">Kelayakan Makanan</label>
-                            </td>
-                            <td><textarea name="deskripsi-1" rows="3"></textarea></td>
-                            <td><textarea name="bukti-1" rows="3"></textarea></td>
-                            <td><textarea name="tindaklanjut-1" rows="3"></textarea></td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>
-                                <input type="checkbox" id="keluhan-2" name="keluhan-sebelum"
-                                    value="Kebersihan Dapur/Pengolahan">
-                                <label for="keluhan-2">Kebersihan Dapur/Pengolahan</label>
-                            </td>
-                            <td><textarea name="deskripsi-2" rows="3"></textarea></td>
-                            <td><textarea name="bukti-2" rows="3"></textarea></td>
-                            <td><textarea name="tindaklanjut-2" rows="3"></textarea></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>
-                                <input type="checkbox" id="keluhan-3" name="keluhan-sebelum"
-                                    value="Pilihan Menu Tidak Sesuai">
-                                <label for="keluhan-3">Pilihan Menu Tidak Sesuai</label>
-                            </td>
-                            <td><textarea name="deskripsi-3" rows="3"></textarea></td>
-                            <td><textarea name="bukti-3" rows="3"></textarea></td>
-                            <td><textarea name="tindaklanjut-3" rows="3"></textarea></td>
-                        </tr>
-                    </tbody>
-                </table>
+
+                <div class="form-group">
+                    <p><b>Kelayakan Makanan:</b></p>
+                    <input type="radio" id="layak" name="kelayakan_makanan" value="Layak" required>
+                    <label for="layak">Layak</label>
+                    <input type="radio" id="tidak-layak" name="kelayakan_makanan" value="Tidak Layak">
+                    <label for="tidak-layak">Tidak Layak</label>
+                </div>
+
+                <div class="form-group">
+                    <label for="deskripsi-layak">Deskripsi Keluhan:</label>
+                    <textarea id="deskripsi-layak" name="deskripsi_kelayakan_makanan" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="bukti-layak">Bukti Pendukung (Maks. 1MB per file):</label>
+                    <input type="file" id="bukti-layak" name="bukti_layak" multiple accept="image/*,video/*">
+                </div>
+
+                <div class="form-group">
+                    <label for="tindaklanjut-layak">Permintaan Tindak Lanjut:</label>
+                    <textarea id="tindaklanjut-layak" name="tindaklanjut_layak" rows="3"></textarea>
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+                    <p><b>Kebersihan Dapur/Pengolahan:</b></p>
+                    <input type="radio" id="bersih" name="kebersihan" value="Bersih" required>
+                    <label for="bersih">Bersih</label>
+                    <input type="radio" id="tidak-bersih" name="kebersihan" value="Tidak Bersih">
+                    <label for="tidak-bersih">Tidak Bersih</label>
+                </div>
+
+                <div class="form-group">
+                    <label for="deskripsi-bersih">Deskripsi Keluhan:</label>
+                    <textarea id="deskripsi-bersih" name="deskripsi_kebersihan" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="bukti-bersih">Bukti Pendukung (Maks. 1MB per file):</label>
+                    <input type="file" id="bukti-bersih" name="bukti_bersih" multiple accept="image/*,video/*">
+                </div>
+
+                <div class="form-group">
+                    <label for="tindaklanjut-bersih">Permintaan Tindak Lanjut:</label>
+                    <textarea id="tindaklanjut-bersih" name="tindaklanjut_bersih" rows="3"></textarea>
+                </div>
+
                 <button type="submit">Kirim Laporan Form A</button>
             </form>
 
             <form id="form-after" class="complaint-form" style="display:none;">
                 <h3>Bagian C – Form B (Sesudah Terjadi Kejadian/Insiden)</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Jenis Insiden</th>
-                            <th>Kronologi Kejadian</th>
-                            <th>Dampak pada Korban</th>
-                            <th>Bukti Pendukung</th>
-                            <th>Permintaan Pertanggungjawaban</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                <input type="checkbox" id="insiden-1" name="insiden-setelah"
-                                    value="Keracunan/Jatuh Sakit">
-                                <label for="insiden-1">Keracunan/Jatuh Sakit</label>
-                            </td>
-                            <td><textarea name="kronologi-1" rows="3"></textarea></td>
-                            <td><textarea name="dampak-1" rows="3"></textarea></td>
-                            <td><textarea name="bukti-setelah-1" rows="3"></textarea></td>
-                            <td><textarea name="tanggungjawab-1" rows="3"></textarea></td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>
-                                <input type="checkbox" id="insiden-2" name="insiden-setelah" value="Rawat Inap">
-                                <label for="insiden-2">Rawat Inap</label>
-                            </td>
-                            <td><textarea name="kronologi-2" rows="3"></textarea></td>
-                            <td><textarea name="dampak-2" rows="3"></textarea></td>
-                            <td><textarea name="bukti-setelah-2" rows="3"></textarea></td>
-                            <td><textarea name="tanggungjawab-2" rows="3"></textarea></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>
-                                <input type="checkbox" id="insiden-3" name="insiden-setelah" value="Kematian">
-                                <label for="insiden-3">Kematian</label>
-                            </td>
-                            <td><textarea name="kronologi-3" rows="3"></textarea></td>
-                            <td><textarea name="dampak-3" rows="3"></textarea></td>
-                            <td><textarea name="bukti-setelah-3" rows="3"></textarea></td>
-                            <td><textarea name="tanggungjawab-3" rows="3"></textarea></td>
-                        </tr>
-                    </tbody>
-                </table>
+
+                <div class="form-group">
+                    <p><b>Jenis Insiden:</b></p>
+                    <input type="radio" id="keracunan" name="jenis_insiden" value="Keracunan/Jatuh Sakit" required>
+                    <label for="keracunan">Keracunan/Jatuh Sakit</label>
+                    <input type="radio" id="rawat-inap" name="jenis_insiden" value="Rawat Inap">
+                    <label for="rawat-inap">Rawat Inap</label>
+                    <input type="radio" id="kematian" name="jenis_insiden" value="Kematian">
+                    <label for="kematian">Kematian</label>
+                </div>
+
+                <div class="form-group">
+                    <label for="kronologi">Kronologi Kejadian:</label>
+                    <textarea id="kronologi" name="kronologi_kejadian" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="dampak">Dampak pada Korban:</label>
+                    <textarea id="dampak" name="dampak_korban" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="bukti-setelah">Bukti Pendukung (Surat Dokter/RS, Foto, Saksi):</label>
+                    <input type="file" id="bukti-setelah" name="bukti_setelah" multiple
+                        accept="image/*,video/*,application/pdf">
+                </div>
+
+                <div class="form-group">
+                    <label for="tanggungjawab">Permintaan Pertanggungjawaban:</label>
+                    <textarea id="tanggungjawab" name="tanggungjawab" rows="3"></textarea>
+                </div>
+
                 <button type="submit">Kirim Laporan Form B</button>
             </form>
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="script.js"></script>
 </body>
