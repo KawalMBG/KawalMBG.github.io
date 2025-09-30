@@ -18,12 +18,12 @@
             <div id="google-login-button"></div>
         </div>
 
-        <div id="main-form-section" class="section" style="display:none;">
+        <div id="main-form-section" class="section" >
             <p id="user-info">Selamat datang, [Nama Pengguna]</p>
 
             <form id="reporter-info-form">
                 <label for="reporter-name">Nama Pelapor:</label>
-                <input type="text" id="reporter-name" name="reporter-name" readonly required>
+                <input type="text" id="reporter-name" name="reporter-name" required>
 
                 <label for="reporter-whatsapp">No Whatsapp:</label>
                 <input type="tel" id="reporter-whatsapp" name="reporter-whatsapp" pattern="[0-9]{10,15}" required>
@@ -77,11 +77,6 @@
                 <div class="form-group">
                     <label for="bukti-layak">Bukti Pendukung (Maks. 1MB per file):</label>
                     <input type="file" id="bukti-layak" name="bukti_layak" multiple accept="image/*,video/*">
-                </div>
-
-                <div class="form-group">
-                    <label for="tindaklanjut-layak">Permintaan Tindak Lanjut:</label>
-                    <textarea id="tindaklanjut-layak" name="tindaklanjut_layak" rows="3"></textarea>
                 </div>
 
                 <hr>
@@ -149,6 +144,10 @@
                         </tr>
                     </table>
                 </div>
+                <div class="form-group">
+                    <label for="jumlah">Jumlah Terdampak:</label>
+                    <input id="jumlah" name="jumlah_terdampak" type="number">
+                </div>
 
                 <div class="form-group">
                     <label for="kronologi">Kronologi Kejadian:</label>
@@ -167,7 +166,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="tanggungjawab">Permintaan Pertanggungjawaban:</label>
+                    <label for="tanggungjawab">Permintaan Tindak lanjut :</label>
                     <textarea id="tanggungjawab" name="tanggungjawab" rows="3"></textarea>
                 </div>
 

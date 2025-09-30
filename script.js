@@ -108,7 +108,6 @@ formBefore.addEventListener('submit', function(event) {
     const data = {};
     formData.forEach((value, key) => data[key] = value);
     
-    data['reporter_name'] = document.getElementById('reporter-name').value;
     data['reporter_whatsapp'] = document.getElementById('reporter-whatsapp').value;
     data['reporter_school'] = document.getElementById('reporter-school').value;
     data['report_type'] = 'Sebelum';
