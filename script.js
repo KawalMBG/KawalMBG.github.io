@@ -4,6 +4,8 @@ const GOOGLE_CLIENT_ID = '731188070183-ghpts2ppss378mlspma2bh3edci6eo37.apps.goo
 const MAX_FILE_SIZE_MB = 1;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxdl8A2jYBdad5YH1ruV_zwWgpdq5ZfGkRJL1Xn1ixzpJk8vnemzbCh-wLtuj9gIiYREQ/exec';
+
 // --- Data Dummy untuk Autocomplete dan Alamat Sekolah ---
 const schools = [
     { name: "SDN 1 Ngaliyan", address: "Jl. Beringin Raya No. 1, Ngaliyan, Kota Semarang" },
@@ -35,7 +37,7 @@ function handleCredentialResponse(response) {
     document.body.style.alignItems = 'flex-start';
 
     // Mengisi nama pelapor secara otomatis dari akun Google
-    // document.getElementById('reporter-name').value = payload.name;
+    document.getElementById('reporter-name').value = payload.name;
     document.getElementById('user-info').textContent = `Selamat datang, ${payload.name}`;
     localStorage.setItem('userEmail', payload.email);
 }
@@ -137,17 +139,43 @@ formBefore.addEventListener('submit', function(event) {
     
     const formData = new FormData(this);
     const data = {};
-    formData.forEach((value, key) => data[key] = value);
+    formData.forEach((value, key) => {
+        if (key === 'keluhan_makanan[]') {
+            if (!data['keluhan_makanan']) {
+                data['keluhan_makanan'] = [];
+            }
+            data['keluhan_makanan'].push(value);
+        } else {
+            data[key] = value;
+        }
+    });
     
-    data['reporter_name'] = document.getElementById('reporter-name').value;
-    data['reporter_whatsapp'] = document.getElementById('reporter-whatsapp').value;
-    data['reporter_school'] = document.getElementById('reporter-school').value;
-    data['reporter_location'] = document.getElementById('reporter-location').value;
-    data['reporter_school_address'] = document.getElementById('reporter-school-address').value;
-    data['report_type'] = 'Keluhan';
+    // Menggabungkan data dari form identitas
+    const reporterInfoForm = document.getElementById('reporter-info-form');
+    const reporterFormData = new FormData(reporterInfoForm);
+    reporterFormData.forEach((value, key) => data[key] = value);
 
-    console.log("Data Form A (Keluhan) yang akan dikirim:", data);
-    alert('Form A berhasil dikirim!');
+    // Kirim data ke Google Apps Script
+    fetch(WEB_APP_URL, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.result === 'success') {
+            alert('Form A berhasil dikirim!');
+            window.location.reload(); // Muat ulang halaman setelah berhasil
+        } else {
+            alert('Terjadi kesalahan: ' + result.message);
+        }
+    })
+    .catch(error => {
+        alert('Terjadi kesalahan saat mengirim laporan.');
+        console.error('Error:', error);
+    });
 });
 
 formAfter.addEventListener('submit', function(event) {
@@ -162,15 +190,32 @@ formAfter.addEventListener('submit', function(event) {
     const data = {};
     formData.forEach((value, key) => data[key] = value);
     
-    data['reporter_name'] = document.getElementById('reporter-name').value;
-    data['reporter_whatsapp'] = document.getElementById('reporter-whatsapp').value;
-    data['reporter_school'] = document.getElementById('reporter-school').value;
-    data['reporter_location'] = document.getElementById('reporter-location').value;
-    data['reporter_school_address'] = document.getElementById('reporter-school-address').value;
-    data['report_type'] = 'Insiden';
+    const reporterInfoForm = document.getElementById('reporter-info-form');
+    const reporterFormData = new FormData(reporterInfoForm);
+    reporterFormData.forEach((value, key) => data[key] = value);
+
     // Menambahkan data tanggal dan waktu kejadian dari Form B
     data['incident_datetime'] = document.getElementById('incident-datetime').value;
-    
-    console.log("Data Form B (Insiden) yang akan dikirim:", data);
-    alert('Form B berhasil dikirim!');
+
+    // Kirim data ke Google Apps Script
+    fetch(WEB_APP_URL, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.result === 'success') {
+            alert('Form B berhasil dikirim!');
+            window.location.reload();
+        } else {
+            alert('Terjadi kesalahan: ' + result.message);
+        }
+    })
+    .catch(error => {
+        alert('Terjadi kesalahan saat mengirim laporan.');
+        console.error('Error:', error);
+    });
 });
