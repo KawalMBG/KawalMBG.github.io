@@ -4,7 +4,7 @@ const GOOGLE_CLIENT_ID = '731188070183-ghpts2ppss378mlspma2bh3edci6eo37.apps.goo
 const MAX_FILE_SIZE_MB = 1;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxdl8A2jYBdad5YH1ruV_zwWgpdq5ZfGkRJL1Xn1ixzpJk8vnemzbCh-wLtuj9gIiYREQ/exec';
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxMJS9vGbWNnhYg-sk7cHXe-iQfsRDptIZBtaFiLouetnUXFVDV75BJwQsuDmsDqlxADQ/exec';
 
 // --- Data Dummy untuk Autocomplete dan Alamat Sekolah ---
 const schools = [
