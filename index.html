@@ -4,9 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulir Komplain PMBG</title>
+    <title>Formulir Aduan PMBG</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
 </head>
 
 <body>
@@ -17,7 +19,7 @@
         
         <!-- WELCOME SECTION -->
         <div id="welcome-section" class="section">
-            <h3>Formulir Pelaporan Program Makan Bergizi Gratis (MBG) <br /> Semarang Raya</h3>
+            <h3>Formulir Aduan Program Makan Bergizi Gratis (MBG) <br /> Semarang Raya</h3>
             <p>Terima kasih telah meluangkan waktu untuk mengisi formulir ini.</p>
             <p>Partisipasi Anda sangat penting untuk menjaga kualitas, keamanan, dan keberlanjutan program MBG.</p>
             <p>Semua data dan informasi yang Anda sampaikan akan dijaga kerahasiaannya dan hanya digunakan untuk
@@ -29,7 +31,7 @@
         </div>
 
         <!-- MAIN FORM SECTION -->
-        <div id="main-form-section" class="section"  style="display:none;">
+        <div id="main-form-section" class="section" style="display:none;">
             <p id="user-info">Selamat datang, [Nama Pengguna]</p>
 
             <!-- FORM INFORMASI PELAPOR -->
@@ -41,15 +43,25 @@
                 <input type="tel" id="reporter-whatsapp" name="reporter-whatsapp" pattern="[0-9]{10,15}" required>
                 <span id="whatsapp-error" class="error-message"></span>
 
+                <!-- <label for="reporter-location">Kabupaten/Kota:</label>
+                <input type="text" id="reporter-location" name="reporter-location" placeholder="Cari kota atau wilayah..." required> -->
                 <label for="reporter-location">Kabupaten/Kota:</label>
-                <input type="text" id="reporter-location" name="reporter-location" placeholder="Cari kota atau wilayah..." required>
-
+                <select id="reporter-location" name="reporter-location" required>
+                    <option value="">-- Pilih Kabupaten/Kota --</option>
+                    <option value="Kota Semarang">Kota Semarang</option>
+                    <option value="Kab. Semarang">Kab. Semarang</option>
+                    <option value="Kota Salatiga">Kota Salatiga</option>
+                </select>
+                
                 <label for="reporter-school">Nama Sekolah:</label>
-                <input type="text" id="reporter-school" name="reporter-school" required>
-
+                <input type="text" id="reporter-school" name="reporter-school" placeholder="Pilih kabupaten/kota terlebih dahulu..."
+                    required disabled>
+                <small id="school-hint" style="color: #666; font-style: normal;">Pilih Kabupaten/Kota untuk memuat daftar
+                    sekolah</small>
+                
                 <label for="reporter-school-address">Alamat Sekolah:</label>
-                <input type="text" id="reporter-school-address" name="reporter-school-address" readonly>
-
+                <textarea id="reporter-school-address" name="reporter-school-address" rows="2" readonly
+                    style="resize: none; background-color: #f5f5f5;"></textarea>
                 <hr>
 
                 <div class="form-options">
@@ -192,6 +204,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="script.js"></script>
 </body>
 

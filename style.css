@@ -254,3 +254,64 @@ small {
         padding: 0.8em;
     }
 }
+
+/* TAMBAHKAN CSS INI di style.css */
+
+/* Styling untuk input yang disabled */
+input:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    color: #999;
+}
+
+/* Styling untuk textarea alamat sekolah */
+textarea#reporter-school-address {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    font-size: 0.9em;
+    line-height: 1.4;
+    padding: 10px;
+}
+
+/* Styling untuk hint/small text */
+#school-hint {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.9em;
+    font-style: normal;
+}
+
+/* Dropdown select styling yang lebih baik */
+select#reporter-location {
+    cursor: pointer;
+    padding: 10px;
+}
+
+select#reporter-location:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* Autocomplete dropdown untuk sekolah */
+.ui-autocomplete {
+    max-height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-size: 0.95em;
+}
+
+.ui-menu-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.ui-menu-item:last-child {
+    border-bottom: none;
+}
+
+.ui-state-active,
+.ui-widget-content .ui-state-active {
+    background: #007bff;
+    color: white;
+    border: none;
+}

@@ -7,18 +7,43 @@ const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwzNCxnp
 const MAX_FILE_SIZE_MB = 1;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
-// ==================== DATA DUMMY ====================
-const schools = [
-    { name: "SDN 1 Ngaliyan", address: "Jl. Beringin Raya No. 1, Ngaliyan, Kota Semarang" },
-    { name: "SDN 2 Mijen", address: "Jl. Raya Mijen No. 2, Mijen, Kota Semarang" },
-    { name: "SDN 3 Gunungpati", address: "Jl. Patemon No. 3, Gunungpati, Kota Semarang" },
-    { name: "MIN 1 Semarang", address: "Jl. Wonodri Baru, Semarang Selatan, Kota Semarang" },
-    { name: "SD Islam Al Azhar 25 Semarang", address: "Jl. Sultan Agung No. 13, Candi, Kota Semarang" },
-    { name: "SD Kristen Lentera Kasih", address: "Jl. Gajahmada No. 5, Kota Semarang" },
-    { name: "SD Negeri Kalibanteng Kulon 01", address: "Jl. Siliwangi No. 100, Kalibanteng Kulon, Kota Semarang" }
-];
+/// GANTI DENGAN:
+let allSchools = []; // Array untuk menyimpan semua data sekolah dari JSON
+let filteredSchools = []; // Array untuk sekolah yang sudah difilter berdasarkan lokasi
 
-const indonesianCities = ["Kota Semarang", "Kabupaten Semarang", "Salatiga"];
+// ==================== FUNGSI LOAD DATA DARI JSON ====================
+async function loadSchoolData() {
+    try {
+        const response = await fetch('list_sekolah.json');
+        const data = await response.json();
+        
+        if (data.status === 'success' && data.data) {
+            allSchools = data.data;
+            console.log(`Loaded ${allSchools.length} schools from JSON`);
+        } else {
+            console.error('Invalid JSON format');
+            alert('Gagal memuat data sekolah. Format data tidak valid.');
+        }
+    } catch (error) {
+        console.error('Error loading school data:', error);
+        alert('Gagal memuat data sekolah. Pastikan file list_sekolah.json ada.');
+    }
+}
+
+// ==================== FUNGSI FILTER SEKOLAH BERDASARKAN KABUPATEN ====================
+function filterSchoolsByLocation(kabupaten) {
+    if (!kabupaten) {
+        filteredSchools = [];
+        return;
+    }
+    
+    // Filter sekolah berdasarkan kabupaten yang dipilih
+    filteredSchools = allSchools.filter(school => {
+        return school.KABUPATEN === kabupaten;
+    });
+    
+    console.log(`Found ${filteredSchools.length} schools in ${kabupaten}`);
+}
 
 // ==================== VARIABEL GLOBAL ====================
 let uploadedFilesBefore = [];
@@ -55,7 +80,11 @@ function decodeJwtResponse(token) {
 }
 
 // ==================== INISIALISASI WINDOW ONLOAD ====================
-window.onload = function() {
+// ==================== UPDATE WINDOW.ONLOAD ====================
+window.onload = async function() {
+    // Load data sekolah dari JSON terlebih dahulu
+    await loadSchoolData();
+    
     // Inisialisasi Google Sign-In
     google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
@@ -67,20 +96,64 @@ window.onload = function() {
         { theme: "outline", size: "large", type: "standard" }
     );
     
-    // Inisialisasi Autocomplete untuk Nama Sekolah
-    $("#reporter-school").autocomplete({
-        source: schools.map(school => school.name),
-        select: function(event, ui) {
-            const selectedSchool = schools.find(school => school.name === ui.item.value);
-            if (selectedSchool) {
-                document.getElementById('reporter-school-address').value = selectedSchool.address;
+    // Event listener untuk dropdown Kabupaten/Kota
+    const locationDropdown = document.getElementById('reporter-location');
+    const schoolInput = document.getElementById('reporter-school');
+    const schoolHint = document.getElementById('school-hint');
+    
+    locationDropdown.addEventListener('change', function() {
+        const selectedLocation = this.value;
+        
+        if (selectedLocation) {
+            // Filter sekolah berdasarkan lokasi
+            filterSchoolsByLocation(selectedLocation);
+            
+            // Enable input sekolah
+            schoolInput.disabled = false;
+            schoolInput.placeholder = `Ketik nama sekolah di ${selectedLocation}...`;
+            schoolInput.value = '';
+            document.getElementById('reporter-school-address').value = '';
+            
+            // Update hint
+            schoolHint.textContent = `${filteredSchools.length} sekolah tersedia di ${selectedLocation}`;
+            schoolHint.style.color = '#28a745';
+            
+            // Destroy autocomplete lama jika ada
+            if ($("#reporter-school").hasClass('ui-autocomplete-input')) {
+                $("#reporter-school").autocomplete('destroy');
+            }
+            
+            // Inisialisasi autocomplete dengan data yang sudah difilter
+            $("#reporter-school").autocomplete({
+                source: filteredSchools.map(school => school.NAMA),
+                minLength: 2,
+                select: function(event, ui) {
+                    const selectedSchool = filteredSchools.find(school => school.NAMA === ui.item.value);
+                    if (selectedSchool) {
+                        // Gabungkan alamat lengkap
+                        const fullAddress = `${selectedSchool['ALAMAT JALAN']}, ${selectedSchool['DESA KELURAHAN']}, ${selectedSchool.KECAMATAN}, ${selectedSchool.KABUPATEN}`;
+                        document.getElementById('reporter-school-address').value = fullAddress;
+                    }
+                },
+                open: function() {
+                    $(this).autocomplete('widget').css('z-index', 1000);
+                }
+            });
+            
+        } else {
+            // Disable input sekolah jika belum pilih lokasi
+            schoolInput.disabled = true;
+            schoolInput.placeholder = 'Pilih kabupaten/kota terlebih dahulu...';
+            schoolInput.value = '';
+            document.getElementById('reporter-school-address').value = '';
+            schoolHint.textContent = 'Pilih Kabupaten/Kota untuk memuat daftar sekolah';
+            schoolHint.style.color = '#666';
+            
+            // Destroy autocomplete
+            if ($("#reporter-school").hasClass('ui-autocomplete-input')) {
+                $("#reporter-school").autocomplete('destroy');
             }
         }
-    });
-
-    // Inisialisasi Autocomplete untuk Lokasi
-    $("#reporter-location").autocomplete({
-        source: indonesianCities
     });
 
     // Event listener untuk validasi WhatsApp
@@ -252,15 +325,67 @@ function getSelectedCheckboxValues(name) {
     return values;
 }
 
-// ==================== SUBMIT FORM ADUAN KUALITAS MAKANAN ====================
+// ==================== TAMBAHKAN 3 FUNGSI INI DI ATAS FORM SUBMIT ====================
+
+function showSuccessAlert() {
+    Swal.fire({
+        icon: 'success',
+        title: 'Laporan Berhasil Dikirim!',
+        html: `
+            <div style="text-align: left; padding: 20px;">
+                <p style="font-size: 16px; margin-bottom: 15px;">
+                    <strong>Terima kasih telah melaporkan aduan melalui sistem kami.</strong>
+                </p>
+                <p style="font-size: 14px; line-height: 1.6; color: #666;">
+                    Kami akan segera menindaklanjuti laporan Anda dan melakukan koordinasi dengan pihak terkait. 
+                    Tim kami akan menghubungi Anda melalui nomor WhatsApp yang terdaftar untuk update perkembangan laporan.
+                </p>
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Kembali ke Beranda',
+        confirmButtonColor: '#28a745',
+        cancelButtonText: 'Buat Laporan Lagi',
+        cancelButtonColor: '#6c757d',
+        allowOutsideClick: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = 'https://lapor.kawalmbg.org';
+        } else {
+            window.location.reload();
+        }
+    });
+}
+
+function showErrorAlert(errorMessage) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Terjadi Kesalahan',
+        html: `<p>Maaf, terjadi kesalahan saat mengirim laporan.</p>
+               <p style="font-size: 12px; color: #666; margin-top: 10px;">${errorMessage}</p>`,
+        confirmButtonText: 'Tutup',
+        confirmButtonColor: '#dc3545'
+    });
+}
+
+function showLoadingAlert() {
+    Swal.fire({
+        title: 'Mohon Tunggu...',
+        html: 'Sedang mengirim laporan Anda...',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+}
+
+// ==================== GANTI FORM SUBMIT KUALITAS MAKANAN ====================
 formBefore.addEventListener('submit', async function(event) {
     event.preventDefault();
     
-    // Tampilkan loading
-    const submitButton = this.querySelector('button[type="submit"]');
-    const originalText = submitButton.textContent;
-    submitButton.textContent = 'Mengirim...';
-    submitButton.disabled = true;
+    // GANTI bagian loading - HAPUS submitButton.textContent dan disabled
+    showLoadingAlert();
     
     try {
         // Kumpulkan data reporter
@@ -277,7 +402,13 @@ formBefore.addEventListener('submit', async function(event) {
             try {
                 fileUrls = await uploadFilesToDrive(uploadedFilesBefore, 'kualitas-makanan');
             } catch (error) {
-                alert('Gagal mengupload file. Laporan akan dikirim tanpa file.');
+                // GANTI alert dengan SweetAlert
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Gagal Upload File',
+                    text: 'File tidak dapat diupload. Laporan akan dikirim tanpa file.',
+                    confirmButtonText: 'Lanjutkan'
+                });
                 console.error('Upload error:', error);
             }
         }
@@ -307,29 +438,24 @@ formBefore.addEventListener('submit', async function(event) {
             })
         });
         
-        // Berhasil
-        alert('Aduan Kualitas Makanan berhasil dikirim!');
-        window.location.reload();
+        // GANTI alert dengan SweetAlert
+        Swal.close();
+        showSuccessAlert();
         
     } catch (error) {
-        alert('Terjadi kesalahan saat mengirim laporan: ' + error.message);
+        // GANTI alert dengan SweetAlert
+        Swal.close();
+        showErrorAlert(error.message);
         console.error('Error:', error);
-        
-        // Reset button
-        submitButton.textContent = originalText;
-        submitButton.disabled = false;
     }
 });
 
-// ==================== SUBMIT FORM ADUAN GANGGUAN KESEHATAN ====================
+// ==================== GANTI FORM SUBMIT GANGGUAN KESEHATAN ====================
 formAfter.addEventListener('submit', async function(event) {
     event.preventDefault();
     
-    // Tampilkan loading
-    const submitButton = this.querySelector('button[type="submit"]');
-    const originalText = submitButton.textContent;
-    submitButton.textContent = 'Mengirim...';
-    submitButton.disabled = true;
+    // GANTI bagian loading - HAPUS submitButton.textContent dan disabled
+    showLoadingAlert();
     
     try {
         // Kumpulkan data reporter
@@ -349,7 +475,13 @@ formAfter.addEventListener('submit', async function(event) {
             try {
                 fileUrls = await uploadFilesToDrive(uploadedFilesAfter, 'gangguan-kesehatan');
             } catch (error) {
-                alert('Gagal mengupload file. Laporan akan dikirim tanpa file.');
+                // GANTI alert dengan SweetAlert
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Gagal Upload File',
+                    text: 'File tidak dapat diupload. Laporan akan dikirim tanpa file.',
+                    confirmButtonText: 'Lanjutkan'
+                });
                 console.error('Upload error:', error);
             }
         }
@@ -382,16 +514,14 @@ formAfter.addEventListener('submit', async function(event) {
             })
         });
         
-        // Berhasil
-        alert('Aduan Gangguan Kesehatan berhasil dikirim!');
-        window.location.reload();
+        // GANTI alert dengan SweetAlert
+        Swal.close();
+        showSuccessAlert();
         
     } catch (error) {
-        alert('Terjadi kesalahan saat mengirim laporan: ' + error.message);
+        // GANTI alert dengan SweetAlert
+        Swal.close();
+        showErrorAlert(error.message);
         console.error('Error:', error);
-        
-        // Reset button
-        submitButton.textContent = originalText;
-        submitButton.disabled = false;
     }
 });
