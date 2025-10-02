@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir Komplain PMBG</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+</head>
+
+<body>
+    <div class="container">
+        <center>
+            <img src="logo.png" alt="Logo Kawal MBG" style="width:200px; margin-bottom: 20px;">
+        </center>
+        
+        <!-- WELCOME SECTION -->
+        <div id="welcome-section" class="section">
+            <h3>Selamat Datang di Formulir Pelaporan Program Makan Bergizi Gratis (MBG) Kabupaten Semarang</h3>
+            <p>Terima kasih telah meluangkan waktu untuk mengisi formulir ini.</p>
+            <p>Partisipasi Anda sangat penting untuk menjaga kualitas, keamanan, dan keberlanjutan program MBG.</p>
+            <p>Semua data dan informasi yang Anda sampaikan akan dijaga kerahasiaannya dan hanya digunakan untuk
+                kepentingan evaluasi serta perbaikan program.</p>
+            <p>Silakan login dengan alamat email Anda untuk memulai.</p>
+            <center>
+                <div id="google-login-button"></div>
+            </center>
+        </div>
+
+        <!-- MAIN FORM SECTION -->
+        <div id="main-form-section" class="section" style="display:none;">
+            <p id="user-info">Selamat datang, [Nama Pengguna]</p>
+
+            <!-- FORM INFORMASI PELAPOR -->
+            <form id="reporter-info-form">
+                <label for="reporter-name">Nama Pelapor:</label>
+                <input type="text" id="reporter-name" name="reporter-name" required>
+
+                <label for="reporter-whatsapp">No Whatsapp:</label>
+                <input type="tel" id="reporter-whatsapp" name="reporter-whatsapp" pattern="[0-9]{10,15}" required>
+                <span id="whatsapp-error" class="error-message"></span>
+
+                <label for="reporter-location">Kabupaten/Kota:</label>
+                <input type="text" id="reporter-location" name="reporter-location" placeholder="Cari kota atau wilayah..." required>
+
+                <label for="reporter-school">Nama Sekolah:</label>
+                <input type="text" id="reporter-school" name="reporter-school" required>
+
+                <label for="reporter-school-address">Alamat Sekolah:</label>
+                <input type="text" id="reporter-school-address" name="reporter-school-address" readonly>
+
+                <hr>
+
+                <div class="form-options">
+                    <label for="report-type">Pilih Tipe Laporan:</label>
+                    <select id="report-type" name="report-type" required>
+                        <option value="">-- Pilih Tipe --</option>
+                        <option value="before">Aduan kualitas makanan</option>
+                        <option value="after">Aduan gangguan kesehatan</option>
+                    </select>
+                </div>
+            </form>
+
+            <!-- FORM ADUAN KUALITAS MAKANAN -->
+            <form id="form-before" class="complaint-form" style="display:none;">
+                <h3>Form Aduan kualitas makanan</h3>
+
+                <div class="form-group">
+                    <p><b>Kelayakan Makanan:</b></p>
+                    <p>Pilih keluhan yang sesuai:</p>
+                    <div class="flex-container">
+                        <div class="flex-item">
+                            <input type="checkbox" name="keluhan_makanan[]" value="Makanan berbau tidak sedap">
+                            <label>Makanan berbau tidak sedap</label>
+                        </div>
+                        <div class="flex-item">
+                            <input type="checkbox" name="keluhan_makanan[]" value="Makanan terasa asam / basi">
+                            <label>Makanan terasa asam / basi</label>
+                        </div>
+                        <div class="flex-item">
+                            <input type="checkbox" name="keluhan_makanan[]" value="Makanan terlihat berlendir / berubah tekstur">
+                            <label>Makanan terlihat berlendir / berubah tekstur</label>
+                        </div>
+                        <div class="flex-item">
+                            <input type="checkbox" name="keluhan_makanan[]" value="Makanan berubah warna (tidak normal)">
+                            <label>Makanan berubah warna (tidak normal)</label>
+                        </div>
+                        <div class="flex-item">
+                            <input type="checkbox" name="keluhan_makanan[]" value="Makanan mengandung benda asing">
+                            <label>Makanan mengandung benda asing (serangga, rambut, plastik, dll.)</label>
+                        </div>
+                        <div class="flex-item">
+                            <input type="checkbox" name="keluhan_makanan[]" value="Makanan kurang matang">
+                            <label>Makanan kurang matang</label>
+                        </div>
+                        <div class="flex-item">
+                            <input type="checkbox" name="keluhan_makanan[]" value="Makanan terlalu lama disimpan">
+                            <label>Makanan terlalu lama disimpan (sudah dingin / tidak segar)</label>
+                        </div>
+                        <div class="flex-item">
+                            <input type="checkbox" name="keluhan_makanan[]" value="Makanan menyebabkan mual, muntah, atau diare">
+                            <label>Makanan menyebabkan mual, muntah, atau diare setelah dikonsumsi</label>
+                        </div>
+                        <div class="flex-item">
+                            <input type="checkbox" name="keluhan_makanan[]" value="Lainnya">
+                            <label>Lainnya (harap tulis keterangan)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="deskripsi-layak">Deskripsi Keluhan:</label>
+                    <textarea id="deskripsi-layak" name="deskripsi_keluhan" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="bukti-layak">Bukti Pendukung (Maks. 1MB per file):</label>
+                    <input type="file" id="bukti-layak" name="bukti_layak" multiple accept="image/*,video/*">
+                    <small>Diterima: Gambar dan Video</small>
+                    <div id="file-list-before" class="file-list"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="tindaklanjut-bersih">Permintaan Tindak Lanjut:</label>
+                    <textarea id="tindaklanjut-bersih" name="tindaklanjut_bersih" rows="3"></textarea>
+                </div>
+
+                <button type="submit">Kirim Laporan</button>
+            </form>
+
+            <!-- FORM ADUAN GANGGUAN KESEHATAN -->
+            <form id="form-after" class="complaint-form" style="display:none;">
+                <h3>Form Aduan gangguan kesehatan</h3>
+
+                <div class="form-group">
+                    <p><b>Jenis Insiden:</b></p>
+                    <div class="flex-container">
+                        <div class="flex-item">
+                            <input type="radio" id="insiden-keracunan" name="jenis_insiden" value="Keracunan Ringan" required>
+                            <label for="insiden-keracunan">Keracunan Ringan</label>
+                        </div>
+                        <div class="flex-item">
+                            <input type="radio" id="insiden-rawat-inap" name="jenis_insiden" value="Rawat Inap">
+                            <label for="insiden-rawat-inap">Keracunan Berat / Rawat Inap</label>
+                        </div>
+                        <div class="flex-item">
+                            <input type="radio" id="insiden-kematian" name="jenis_insiden" value="Kematian">
+                            <label for="insiden-kematian">Kematian</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="incident-datetime">Tanggal & Waktu Kejadian:</label>
+                    <input type="datetime-local" id="incident-datetime" name="incident_datetime" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="jumlah">Jumlah Terdampak:</label>
+                    <input id="jumlah" name="jumlah_terdampak" type="number">
+                    <small>Masukan berupa angka</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="kronologi">Kronologi Kejadian:</label>
+                    <textarea id="kronologi" name="kronologi_kejadian" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="dampak">Dampak pada Korban:</label>
+                    <textarea id="dampak" name="dampak_korban" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="bukti-setelah">Bukti Pendukung (Surat Dokter/RS, Foto, Saksi):</label>
+                    <input type="file" id="bukti-setelah" name="bukti_setelah" multiple accept="image/*,video/*,application/pdf">
+                    <small>Diterima: Gambar, Video, PDF</small>
+                    <div id="file-list-after" class="file-list"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="tanggungjawab">Permintaan Tindak lanjut:</label>
+                    <textarea id="tanggungjawab" name="tanggungjawab" rows="3"></textarea>
+                </div>
+
+                <button type="submit">Kirim Laporan</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
