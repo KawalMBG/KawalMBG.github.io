@@ -242,7 +242,7 @@ function fileToBase64(file) {
     });
 }
 
-// Upload file 
+// Upload file ke Google Drive dengan struktur folder per tanggal
 async function uploadFilesToDrive(files, formType) {
     const uploadedLinks = [];
     
@@ -258,7 +258,7 @@ async function uploadFilesToDrive(files, formType) {
             const base64Data = await fileToBase64(file);
             
             // Kirim ke Google Apps Script dengan informasi folder
-            await fetch(GOOGLE_APPS_SCRIPT_URL, {
+            const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: {
@@ -275,9 +275,14 @@ async function uploadFilesToDrive(files, formType) {
                 })
             });
             
-            // Karena no-cors, kita tidak bisa baca response langsung
-            // Tapi file tetap ter-upload dan link akan otomatis dibuat oleh Apps Script
-            uploadedLinks.push(file.name);
+            // Karena no-cors, kita tidak bisa baca response
+            // Link akan dibuat di server-side dan dikembalikan via webhook atau log
+            // Untuk sementara, simpan info file
+            uploadedLinks.push({
+                name: file.name,
+                size: file.size,
+                date: reportDate
+            });
             
         } catch (error) {
             console.error('Error uploading file:', file.name, error);
@@ -287,6 +292,7 @@ async function uploadFilesToDrive(files, formType) {
     
     return uploadedLinks;
 }
+
 
 // ==================== LOGIKA FORM DINAMIS ====================
 const formBefore = document.getElementById('form-before');
