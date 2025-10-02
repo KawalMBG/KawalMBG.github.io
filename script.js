@@ -385,38 +385,33 @@ function showLoadingAlert() {
     });
 }
 
+// ==================== GANTI FORM SUBMIT KUALITAS MAKANAN ====================
 formBefore.addEventListener('submit', async function(event) {
     event.preventDefault();
     
+    // GANTI bagian loading - HAPUS submitButton.textContent dan disabled
     showLoadingAlert();
     
     try {
+        // Kumpulkan data reporter
         const reporterData = getReporterInfo();
+        
+        // Kumpulkan data form
         const keluhanMakanan = getSelectedCheckboxValues('keluhan_makanan[]');
         const deskripsiKeluhan = document.getElementById('deskripsi-layak').value;
         const tindakLanjut = document.getElementById('tindaklanjut-bersih').value;
         
-        // Upload file dan dapatkan link (jika ada)
-        let fileDriveLinks = '';
+        // Upload file jika ada
+        let fileUrls = [];
         if (uploadedFilesBefore.length > 0) {
             try {
-                const uploadResults = await uploadFilesToDrive(uploadedFilesBefore, 'kualitas-makanan');
-                
-                // Karena mode no-cors, link akan otomatis dibuat di Google Apps Script
-                // Kita kirim info file yang di-upload untuk referensi
-                const reportDate = new Date().toISOString().split('T')[0];
-                fileDriveLinks = `File diupload: ${uploadResults.join(', ')} | Tanggal: ${reportDate}`;
-                
+                fileUrls = await uploadFilesToDrive(uploadedFilesBefore, 'kualitas-makanan');
             } catch (error) {
+                // GANTI alert dengan SweetAlert
                 Swal.fire({
                     icon: 'warning',
                     title: 'Gagal Upload File',
                     text: 'File tidak dapat diupload. Laporan akan dikirim tanpa file.',
-                    confirmButtonText: 'Lanjutkan'
-                });
-                console.error('Upload error:', error);
-            }
-        } 'File tidak dapat diupload. Laporan akan dikirim tanpa file.',
                     confirmButtonText: 'Lanjutkan'
                 });
                 console.error('Upload error:', error);
@@ -430,11 +425,12 @@ formBefore.addEventListener('submit', async function(event) {
             keluhan_makanan: keluhanMakanan.join(', '),
             deskripsi_keluhan: deskripsiKeluhan,
             tindak_lanjut: tindakLanjut,
-            file_bukti_links: fileDriveLinks,  // GANTI: Simpan link, bukan nama file
+            file_bukti: fileUrls.map(f => f.name).join(', '),
             timestamp: new Date().toISOString(),
             reporter_email: userEmail
         };
         
+        // Kirim ke Google Sheets via Apps Script
         const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
@@ -447,26 +443,30 @@ formBefore.addEventListener('submit', async function(event) {
             })
         });
         
+        // GANTI alert dengan SweetAlert
         Swal.close();
         showSuccessAlert();
         
     } catch (error) {
+        // GANTI alert dengan SweetAlert
         Swal.close();
         showErrorAlert(error.message);
         console.error('Error:', error);
     }
 });
 
-// ==================== UPDATE FORM SUBMIT GANGGUAN KESEHATAN ====================
-// GANTI HANYA BAGIAN UPLOAD DAN PENYIMPANAN FILE
-
+// ==================== GANTI FORM SUBMIT GANGGUAN KESEHATAN ====================
 formAfter.addEventListener('submit', async function(event) {
     event.preventDefault();
     
+    // GANTI bagian loading - HAPUS submitButton.textContent dan disabled
     showLoadingAlert();
     
     try {
+        // Kumpulkan data reporter
         const reporterData = getReporterInfo();
+        
+        // Kumpulkan data form
         const jenisInsiden = document.querySelector('input[name="jenis_insiden"]:checked').value;
         const incidentDatetime = document.getElementById('incident-datetime').value;
         const jumlahTerdampak = document.getElementById('jumlah').value;
@@ -474,27 +474,17 @@ formAfter.addEventListener('submit', async function(event) {
         const dampak = document.getElementById('dampak').value;
         const tanggungjawab = document.getElementById('tanggungjawab').value;
         
-        // Upload file dan dapatkan link (jika ada)
-        let fileDriveLinks = '';
+        // Upload file jika ada
+        let fileUrls = [];
         if (uploadedFilesAfter.length > 0) {
             try {
-                const uploadResults = await uploadFilesToDrive(uploadedFilesAfter, 'gangguan-kesehatan');
-                
-                // Karena mode no-cors, link akan otomatis dibuat di Google Apps Script
-                // Kita kirim info file yang di-upload untuk referensi
-                const reportDate = new Date().toISOString().split('T')[0];
-                fileDriveLinks = `File diupload: ${uploadResults.join(', ')} | Tanggal: ${reportDate}`;
-                
+                fileUrls = await uploadFilesToDrive(uploadedFilesAfter, 'gangguan-kesehatan');
             } catch (error) {
+                // GANTI alert dengan SweetAlert
                 Swal.fire({
                     icon: 'warning',
                     title: 'Gagal Upload File',
                     text: 'File tidak dapat diupload. Laporan akan dikirim tanpa file.',
-                    confirmButtonText: 'Lanjutkan'
-                });
-                console.error('Upload error:', error);
-            }
-        } 'File tidak dapat diupload. Laporan akan dikirim tanpa file.',
                     confirmButtonText: 'Lanjutkan'
                 });
                 console.error('Upload error:', error);
@@ -511,11 +501,12 @@ formAfter.addEventListener('submit', async function(event) {
             kronologi_kejadian: kronologi,
             dampak_korban: dampak,
             tindak_lanjut: tanggungjawab,
-            file_bukti_links: fileDriveLinks,  // GANTI: Simpan link, bukan nama file
+            file_bukti: fileUrls.map(f => f.name).join(', '),
             timestamp: new Date().toISOString(),
             reporter_email: userEmail
         };
         
+        // Kirim ke Google Sheets via Apps Script
         const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
@@ -528,10 +519,12 @@ formAfter.addEventListener('submit', async function(event) {
             })
         });
         
+        // GANTI alert dengan SweetAlert
         Swal.close();
         showSuccessAlert();
         
     } catch (error) {
+        // GANTI alert dengan SweetAlert
         Swal.close();
         showErrorAlert(error.message);
         console.error('Error:', error);
