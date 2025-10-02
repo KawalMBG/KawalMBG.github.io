@@ -38,15 +38,14 @@
                 <input type="tel" id="reporter-whatsapp" name="reporter-whatsapp" pattern="[0-9]{10,15}" required>
                 <span id="whatsapp-error" class="error-message"></span>
 
+                <label for="reporter-location">Kabupaten/Kota:</label>
+                <input type="text" id="reporter-location" name="reporter-location" placeholder="Cari kota atau wilayah..." required>
+
                 <label for="reporter-school">Nama Sekolah:</label>
                 <input type="text" id="reporter-school" name="reporter-school" required>
 
                 <label for="reporter-school-address">Alamat Sekolah:</label>
                 <input type="text" id="reporter-school-address" name="reporter-school-address" readonly>
-
-                <label for="reporter-location">Lokasi:</label>
-                <input type="text" id="reporter-location" name="reporter-location"
-                    placeholder="Cari kota atau wilayah..." required>
 
                 <hr>
 
@@ -54,14 +53,14 @@
                     <label for="report-type">Pilih Tipe Laporan:</label>
                     <select id="report-type" name="report-type" required>
                         <option value="">-- Pilih Tipe --</option>
-                        <option value="before">Form A (Keluhan)</option>
-                        <option value="after">Form B (Insiden)</option>
+                        <option value="before">Aduan kualitas makanan</option>
+                        <option value="after">Aduan gangguan kesehatan</option>
                     </select>
                 </div>
             </form>
 
             <form id="form-before" class="complaint-form" style="display:none;">
-                <h3>Form A - Keluhan</h3>
+                <h3>Form Aduan kualitas makanan</h3>
 
                 <div class="form-group">
                     <p><b>Kelayakan Makanan:</b></p>
@@ -105,39 +104,16 @@
                     <small>Diterima: Gambar dan Video</small>
                 </div>
 
-                <hr>
-
-                <div class="form-group">
-                    <p><b>Kebersihan Dapur/Pengolahan:</b></p>
-                    <div class="flex-container">
-                        <div class="flex-item"><input type="radio" id="dapur-bersih" name="kebersihan" value="Bersih"
-                                required> <label for="dapur-bersih">Bersih</label></div>
-                        <div class="flex-item"><input type="radio" id="dapur-tidak-bersih" name="kebersihan"
-                                value="Tidak Bersih"> <label for="dapur-tidak-bersih">Tidak Bersih</label></div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="deskripsi-bersih">Deskripsi Keluhan:</label>
-                    <textarea id="deskripsi-bersih" name="deskripsi_kebersihan" rows="3"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="bukti-bersih">Bukti Pendukung (Maks. 1MB per file):</label>
-                    <input type="file" id="bukti-bersih" name="bukti_bersih" multiple accept="image/*,video/*">
-                    <small>Diterima: Gambar dan Video</small>
-                </div>
-
                 <div class="form-group">
                     <label for="tindaklanjut-bersih">Permintaan Tindak Lanjut:</label>
                     <textarea id="tindaklanjut-bersih" name="tindaklanjut_bersih" rows="3"></textarea>
                 </div>
 
-                <button type="submit">Kirim Laporan Form A</button>
+                <button type="submit">Kirim Laporan</button>
             </form>
 
             <form id="form-after" class="complaint-form" style="display:none;">
-                <h3>Form B - Insiden</h3>
+                <h3>Form Aduan gangguan kesehatan</h3>
 
                 <div class="form-group">
                     <p><b>Jenis Insiden:</b></p>
@@ -186,7 +162,7 @@
                     <textarea id="tanggungjawab" name="tanggungjawab" rows="3"></textarea>
                 </div>
 
-                <button type="submit">Kirim Laporan Form B</button>
+                <button type="submit">Kirim Laporan</button>
             </form>
         </div>
     </div>

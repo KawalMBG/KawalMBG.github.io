@@ -4,7 +4,8 @@ const GOOGLE_CLIENT_ID = '731188070183-ghpts2ppss378mlspma2bh3edci6eo37.apps.goo
 const MAX_FILE_SIZE_MB = 1;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxMJS9vGbWNnhYg-sk7cHXe-iQfsRDptIZBtaFiLouetnUXFVDV75BJwQsuDmsDqlxADQ/exec';
+// URL API SheetDB Anda
+const WEB_APP_URL = 'https://sheetdb.io/api/v1/190t7f3p2lblg';
 
 // --- Data Dummy untuk Autocomplete dan Alamat Sekolah ---
 const schools = [
@@ -131,11 +132,12 @@ function validateFiles(files) {
 
 formBefore.addEventListener('submit', function(event) {
     event.preventDefault();
-
-    const fileInput = document.getElementById('bukti-layak');
-    if (!validateFiles(fileInput.files)) {
-        return;
-    }
+    
+    // Matikan sementara validasi file karena SheetDB tidak mendukungnya
+    // const fileInput = document.getElementById('bukti-layak');
+    // if (!validateFiles(fileInput.files)) {
+    //     return;
+    // }
     
     const formData = new FormData(this);
     const data = {};
@@ -155,21 +157,25 @@ formBefore.addEventListener('submit', function(event) {
     const reporterFormData = new FormData(reporterInfoForm);
     reporterFormData.forEach((value, key) => data[key] = value);
 
-    // Kirim data ke Google Apps Script
+    // Tambahkan data penting lainnya
+    data['timestamps'] = new Date().toISOString();
+    data['reporter_email'] = localStorage.getItem('userEmail');
+    
+    // Kirim data ke SheetDB
     fetch(WEB_APP_URL, {
         method: 'POST',
-        body: JSON.stringify(data),
         headers: {
             'Content-Type': 'application/json'
         },
+        body: JSON.stringify(data),
     })
     .then(response => response.json())
     .then(result => {
-        if (result.result === 'success') {
-            alert('Form A berhasil dikirim!');
-            window.location.reload(); // Muat ulang halaman setelah berhasil
+        if (result.created) {
+            alert('Aduan Kualitas Makanan berhasil dikirim!');
+            window.location.reload();
         } else {
-            alert('Terjadi kesalahan: ' + result.message);
+            alert('Terjadi kesalahan saat mengirim: ' + JSON.stringify(result));
         }
     })
     .catch(error => {
@@ -181,10 +187,11 @@ formBefore.addEventListener('submit', function(event) {
 formAfter.addEventListener('submit', function(event) {
     event.preventDefault();
     
-    const fileInput = document.getElementById('bukti-setelah');
-    if (!validateFiles(fileInput.files)) {
-        return;
-    }
+    // Matikan sementara validasi file karena SheetDB tidak mendukungnya
+    // const fileInput = document.getElementById('bukti-setelah');
+    // if (!validateFiles(fileInput.files)) {
+    //     return;
+    // }
     
     const formData = new FormData(this);
     const data = {};
@@ -194,24 +201,26 @@ formAfter.addEventListener('submit', function(event) {
     const reporterFormData = new FormData(reporterInfoForm);
     reporterFormData.forEach((value, key) => data[key] = value);
 
-    // Menambahkan data tanggal dan waktu kejadian dari Form B
+    // Tambahkan data penting lainnya
+    data['timestamps'] = new Date().toISOString();
+    data['reporter_email'] = localStorage.getItem('userEmail');
     data['incident_datetime'] = document.getElementById('incident-datetime').value;
 
-    // Kirim data ke Google Apps Script
+    // Kirim data ke SheetDB
     fetch(WEB_APP_URL, {
         method: 'POST',
-        body: JSON.stringify(data),
         headers: {
             'Content-Type': 'application/json'
         },
+        body: JSON.stringify(data),
     })
     .then(response => response.json())
     .then(result => {
-        if (result.result === 'success') {
-            alert('Form B berhasil dikirim!');
+        if (result.created) {
+            alert('Aduan Gangguan Kesehatan berhasil dikirim!');
             window.location.reload();
         } else {
-            alert('Terjadi kesalahan: ' + result.message);
+            alert('Terjadi kesalahan saat mengirim: ' + JSON.stringify(result));
         }
     })
     .catch(error => {
