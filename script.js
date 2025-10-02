@@ -132,13 +132,6 @@ function validateFiles(files) {
 formBefore.addEventListener('submit', function(event) {
     event.preventDefault();
     
-    // Matikan sementara validasi file karena SheetDB tidak mendukungnya
-    const fileInput = document.getElementById('bukti-layak');
-    if (fileInput.files.length > 0) {
-        alert('Pengunggahan file tidak didukung oleh backend saat ini.');
-        return;
-    }
-    
     const formData = new FormData(this);
     const data = {};
     formData.forEach((value, key) => {
@@ -152,22 +145,20 @@ formBefore.addEventListener('submit', function(event) {
         }
     });
     
-    // Menggabungkan data dari form identitas
     const reporterInfoForm = document.getElementById('reporter-info-form');
     const reporterFormData = new FormData(reporterInfoForm);
     reporterFormData.forEach((value, key) => data[key] = value);
 
-    // Tambahkan data penting lainnya
     data['timestamps'] = new Date().toISOString();
     data['reporter_email'] = localStorage.getItem('userEmail');
     
-    // Kirim data ke SheetDB
+    // Perubahan: mengirim objek data datar
     fetch(WEB_APP_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ data: data }),
+        body: JSON.stringify(data),
     })
     .then(response => response.json())
     .then(result => {
@@ -187,13 +178,6 @@ formBefore.addEventListener('submit', function(event) {
 formAfter.addEventListener('submit', function(event) {
     event.preventDefault();
     
-    // Matikan sementara validasi file karena SheetDB tidak mendukungnya
-    const fileInput = document.getElementById('bukti-setelah');
-    if (fileInput.files.length > 0) {
-        alert('Pengunggahan file tidak didukung oleh backend saat ini.');
-        return;
-    }
-    
     const formData = new FormData(this);
     const data = {};
     formData.forEach((value, key) => data[key] = value);
@@ -202,18 +186,17 @@ formAfter.addEventListener('submit', function(event) {
     const reporterFormData = new FormData(reporterInfoForm);
     reporterFormData.forEach((value, key) => data[key] = value);
 
-    // Tambahkan data penting lainnya
     data['timestamps'] = new Date().toISOString();
     data['reporter_email'] = localStorage.getItem('userEmail');
     data['incident_datetime'] = document.getElementById('incident-datetime').value;
 
-    // Kirim data ke SheetDB
+    // Perubahan: mengirim objek data datar
     fetch(WEB_APP_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ data: data }),
+        body: JSON.stringify(data),
     })
     .then(response => response.json())
     .then(result => {
