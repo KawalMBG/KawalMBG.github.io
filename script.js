@@ -1,6 +1,6 @@
 // ==================== KONFIGURASI ====================
 // GANTI DENGAN ID DAN URL ANDA SENDIRI
-const GOOGLE_CLIENT_ID = '731188070183-ghpts2ppss378mlspma2bh3edci6eo37.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = '281913559817-4do52jugpe16jh74s3otp3o1vhugo06s.apps.googleusercontent.com';
 const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwzNCxnpRl2gmSK0vkvJ1VeJQODsea8IR9eyVRpWDYx0yf87sLDYfYi0RfnxJOs7Vh5/exec'; // Deploy Google Apps Script sebagai Web App
 
 const MAX_FILE_SIZE_MB = 1;
