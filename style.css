@@ -21,8 +21,8 @@ body {
     padding: 2em;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
-    width: 90%;
+    max-width: 900px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -54,8 +54,8 @@ h2 {
 
 h3 {
     margin-top: 10px;
-    color: #28a745;
-    border-bottom: 2px solid #28a745;
+    color: #000000;
+    border-bottom: 2px solid #0a0a0a;
     padding-bottom: 10px;
 }
 
